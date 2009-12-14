@@ -2,19 +2,16 @@ development:
   adapter: mysql
   encoding: utf8
   database: srcfolio_development
-  username: username
-  password: password
 
-test:
+test: &TEST
   adapter: mysql
   encoding: utf8
   database: srcfolio_test
-  username: username
-  password: password
 
 production:
   adapter: mysql
   encoding: utf8
   database: srcfolio_production
-  username: username
-  password: password
+
+cucumber:
+  <<: *TEST
