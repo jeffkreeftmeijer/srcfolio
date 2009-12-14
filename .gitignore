@@ -4,3 +4,6 @@ db/schema.rb
 log/*
 public/stylesheets/*.css
 config/database.yml
+bin/*
+vendor/gems/*
+!vendor/gems/cache/
