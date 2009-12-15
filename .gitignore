@@ -7,3 +7,4 @@ config/database.yml
 bin/*
 vendor/gems/*
 !vendor/gems/cache/
+test
