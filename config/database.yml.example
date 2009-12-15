@@ -1,16 +1,13 @@
 development:
-  adapter: mysql
-  encoding: utf8
+  adapter: mongodb
   database: srcfolio_development
 
 test: &TEST
-  adapter: mysql
-  encoding: utf8
+  adapter: mongodb
   database: srcfolio_test
 
 production:
-  adapter: mysql
-  encoding: utf8
+  adapter: mongodb
   database: srcfolio_production
 
 cucumber:
