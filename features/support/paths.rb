@@ -13,7 +13,7 @@ module NavigationHelpers
 
     when /(.*)'s page/
       contributor = Contributor.find_by_name($1)
-      contributor_path(contributor._id)
+      contributor_path(contributor.login)
 
     # Add more mappings here.
     # Here is a more fancy example:
