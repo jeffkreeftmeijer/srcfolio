@@ -5,7 +5,7 @@ Feature: Contributors
 
   Scenario: A user views a contributor's page
     Given a contributor exists with a login of "al1ce" and a name of "Alice"
-    When I go to the contributor page with a login of "al1ce"
+    When I go to Alice's page
     Then I should see "Alice"
 
   Scenario: A user views a contributor's page who has contributed to some projects

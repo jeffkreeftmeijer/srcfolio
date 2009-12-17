@@ -10,6 +10,10 @@ module NavigationHelpers
     
     when /the home\s?page/
       '/'
+      
+    when /(.*)'s page/
+      contributor = Contributor.find_by_name($1)
+      contributor_path(contributor._id)
     
     # Add more mappings here.
     # Here is a more fancy example:

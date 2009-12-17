@@ -1,5 +1,5 @@
 Given /^a contributor exists with a login of "([^\"]*)" and a name of "([^\"]*)"$/ do |login, name|
-  pending
+  Contributor.make(:login => login, :name => name)
 end
 
 Given /^([^\"]*) has contributed to a project named "([^\"]*)" which is owned by ([^\"]*)$/ do |contributor, project, owner|
