@@ -3,4 +3,6 @@ class Contributor
 
   key :login, String
   key :name, String
+  
+  many :contributions, :class => Project
 end

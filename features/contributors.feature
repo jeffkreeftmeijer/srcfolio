@@ -12,7 +12,7 @@ Feature: Contributors
     Given a contributor exists with a login of "al1ce" and a name of "Alice"
     And Alice has contributed to a project named "project1" which is owned by Bob
     And Alice has contributed to a project named "project2" which is owned by Charlie
-    When I go to the contributor page with a login of "al1ce"
+    When I go to Alice's page
     Then I should see "project1"
     And I should see "project2"
     And I should see "Bob"

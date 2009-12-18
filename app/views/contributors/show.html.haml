@@ -1,1 +1,5 @@
 = @contributor.name
+
+%ul#contributions
+  - @contributor.contributions.each do |contribution|
+    %li= "#{contribution.name}  (owned by #{contribution.owner.name})"

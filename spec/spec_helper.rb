@@ -7,5 +7,5 @@ Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].e
 
 Spec::Runner.configure do |config|
 end
-                              
+
 require File.expand_path(File.join(File.dirname(__FILE__), 'blueprints'))
