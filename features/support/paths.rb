@@ -14,7 +14,10 @@ module NavigationHelpers
     when /(.*)'s page/
       contributor = Contributor.find_by_name($1)
       contributor_path(contributor.login)
-
+    
+    when /the contributor page with a login of "(.*)"/
+      contributor_path($1)
+      
     # Add more mappings here.
     # Here is a more fancy example:
     #

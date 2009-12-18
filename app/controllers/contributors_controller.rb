@@ -1,5 +1,7 @@
 class ContributorsController < ApplicationController
   def show
-    @contributor = Contributor.find_by_login(params[:id])
+    unless @contributor = Contributor.find_by_login(params[:id])
+      render :not_found, :status => 404
+    end
   end
 end

@@ -6,11 +6,10 @@ Given /^([^\"]*) has contributed to a project named "([^\"]*)" which is owned by
   contributor = Contributor.find_by_name(contributor)
   owner = Contributor.make(:name => owner)
   project = Project.make(:name => project)
-  #project.contributors << {:contributor => owner, :owner => true}
   project.owner = owner
   contributor.contributions << project
 end
 
-Given /^([^\"]*) owns a project named "([^\"]*)"$/ do |owner, project|
-  pending
+Given /^there are no contributors$/ do
+  Contributor.delete_all
 end
