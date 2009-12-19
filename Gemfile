@@ -4,10 +4,11 @@ source "http://gemcutter.org"
 
 gem "rails", "2.3.5"
 
-gem "mongo",        "0.18.0"
-gem "mongo_ext",    "0.18.0"
-gem "mongo_mapper", "0.6.7"
-gem "haml",         "2.2.16"
+gem "mongo",                        "0.18.0"
+gem "mongo_ext",                    "0.18.0"
+gem "mongo_mapper",                 "0.6.7"
+gem "haml",                         "2.2.16"
+gem "jeffkreeftmeijer-delayed_job", "1.7.0", :require_as => 'delayed_job'
 
 only :test, :cucumber do
   gem "rspec-rails",            "1.2.9"
