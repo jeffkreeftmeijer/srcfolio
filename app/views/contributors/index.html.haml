@@ -1,0 +1,5 @@
+%h1 Contributors
+
+%ul
+	- @contributors.each do |contributor|
+		%li= link_to(contributor.name, contributor.login)

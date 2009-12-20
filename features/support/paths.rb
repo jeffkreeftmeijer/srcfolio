@@ -10,7 +10,10 @@ module NavigationHelpers
 
     when /the home\s?page/
       '/'
-
+    
+    when /the contributor list/
+      contributors_path
+    
     when /(.*)'s page/
       contributor = Contributor.find_by_name($1)
       contributor_path(contributor.login)

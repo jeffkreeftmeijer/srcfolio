@@ -2,6 +2,8 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe ContributorsController do
   before do
+    Contributor.delete_all
+    
     @contributor = Contributor.make(
       :login => 'charl1e',
       :name => 'Charlie'
@@ -15,7 +17,15 @@ describe ContributorsController do
       ]
     )
   end
-
+  
+  it 'should show a list of contributors' do
+    get 'index'
+    response.should be_success
+    response.should render_template('contributors/index')
+    assigns[:contributors].should_not be_nil
+    assigns[:contributors].count == 2
+  end
+  
   it 'should show a contributor page' do
     get 'show', :id => @contributor.login
     response.should be_success
@@ -33,7 +43,7 @@ describe ContributorsController do
   
   it 'should show a contributor page with contributions' do
     get 'show', :id => @contributor_with_contributions.login
-    assigns[:contributions].count.should eql 1
+    assigns[:contributions].count.should == 1
     assigns[:contributions].each {|c| c.should be_instance_of Project }
   end
 end
