@@ -14,7 +14,7 @@ module Fetcher
         response = get("/#{github_username}")
         raise(NotFound, "No Github user was found named \"#{github_username}\"") if response.code == 404
         
-        Contributor.create(
+        contributor = Contributor.create(
           :login =>     response['user']['login'],
           :name =>      response['user']['name'],
           :company =>   response['user']['company'],
@@ -22,6 +22,8 @@ module Fetcher
           :website =>   response['user']['blog'],
           :email =>     response['user']['email']
         )
+        
+        Fetcher::Repository.fetch_all_by_login(contributor.login)
       end
     end
   end
@@ -34,7 +36,10 @@ module Fetcher
       def fetch_all_by_login(github_username)
         response = get("/#{github_username}")
         response['repositories'].each do |repository|
-          Project.create(:name => repository['name'])
+          Project.create(
+            :name =>  repository['name'],
+            :owner => Contributor.find_by_login(github_username)
+          )
         end
       end
     end

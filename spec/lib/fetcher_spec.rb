@@ -29,6 +29,11 @@ describe Fetcher::User do
       contributor.email.should ==     'jeff@kreeftmeijer.nl'
     end
 
+    it 'should go fetch the contributor repositories when done fetching the contributor' do
+      Fetcher::Repository.should_receive(:fetch_all_by_login).with('jeffkreeftmeijer')
+      Fetcher::User.fetch('jeffkreeftmeijer')
+    end
+
     it 'should raise an error when the specified user could not be found' do
       begin
       Fetcher::User.fetch('idontexist').should raise_error(NotFound, 'No Github user was found named "idontexist"')
@@ -43,6 +48,7 @@ describe Fetcher::Repository do
     repositories_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../stubs/repositories.json')).read
     @repositories = HTTParty::Response.new(JSON(repositories_stub_file), repositories_stub_file, 200, 'OK')
     Fetcher::Repository.stub!(:get).with('/jeffkreeftmeijer').and_return(@repositories)
+    Contributor.create(:login => 'jeffkreeftmeijer')
   end
 
   describe '.fetch_all_by_login' do
@@ -52,11 +58,13 @@ describe Fetcher::Repository do
         and_return(@repositories)
       Fetcher::Repository.fetch_all_by_login('jeffkreeftmeijer')
     end
-    
+
     it 'should create new projects' do
       Fetcher::Repository.fetch_all_by_login('jeffkreeftmeijer')
       projects = Project.all
-      projects.count.should eql 9
+      projects.count.should eql 3
+      projects.first.name.should ==  'wakoopa'
+      projects.first.owner.should be_instance_of(Contributor)
     end
   end
 end
