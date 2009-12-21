@@ -23,7 +23,7 @@ module Fetcher
           :email =>     response['user']['email']
         )
         
-        Fetcher::Repository.fetch_all_by_login(contributor.login)
+        Fetcher::Repository.fetch_all_by_owner_login(contributor.login)
       end
     end
   end
@@ -33,7 +33,7 @@ module Fetcher
     base_uri 'http://github.com/api/v2/json/repos/show/'
     
     class << self
-      def fetch_all_by_login(github_username)
+      def fetch_all_by_owner_login(github_username)
         response = get("/#{github_username}")
         response['repositories'].each do |repository|
           Project.create(

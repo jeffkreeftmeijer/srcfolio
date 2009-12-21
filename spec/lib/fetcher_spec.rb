@@ -30,7 +30,7 @@ describe Fetcher::User do
     end
 
     it 'should go fetch the contributor repositories when done fetching the contributor' do
-      Fetcher::Repository.should_receive(:fetch_all_by_login).with('jeffkreeftmeijer')
+      Fetcher::Repository.should_receive(:fetch_all_by_owner_login).with('jeffkreeftmeijer')
       Fetcher::User.fetch('jeffkreeftmeijer')
     end
 
@@ -51,16 +51,16 @@ describe Fetcher::Repository do
     Contributor.create(:login => 'jeffkreeftmeijer')
   end
 
-  describe '.fetch_all_by_login' do
+  describe '.fetch_all_by_user_login' do
     it 'should call to github to get the user repositories' do
       Fetcher::Repository.should_receive(:get).
         with('/jeffkreeftmeijer').
         and_return(@repositories)
-      Fetcher::Repository.fetch_all_by_login('jeffkreeftmeijer')
+      Fetcher::Repository.fetch_all_by_owner_login('jeffkreeftmeijer')
     end
 
     it 'should create new projects' do
-      Fetcher::Repository.fetch_all_by_login('jeffkreeftmeijer')
+      Fetcher::Repository.fetch_all_by_owner_login('jeffkreeftmeijer')
       projects = Project.all
       projects.count.should eql 3
       projects.first.name.should ==  'wakoopa'
