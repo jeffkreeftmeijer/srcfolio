@@ -40,7 +40,7 @@ end
 describe Fetcher::Repository do
   before do
     delete_everything
-    
+
     repositories_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../stubs/repositories.json')).read
     @repositories = HTTParty::Response.new(JSON(repositories_stub_file), repositories_stub_file, 200, 'OK')
     Fetcher::Repository.stub!(:get).with('/jeffkreeftmeijer').and_return(@repositories)
@@ -57,6 +57,7 @@ describe Fetcher::Repository do
 
     it 'should create new projects' do
       Fetcher::Repository.fetch_all('jeffkreeftmeijer')
+
       projects = Project.all
       projects.count.should eql 3
       projects.first.name.should ==         'srcfolio'
@@ -73,15 +74,18 @@ end
 describe Fetcher::Network do
   before do
     delete_everything
-    
-    @contributor =  Contributor.make(:login => 'jeffkreeftmeijer')
-    @project =      Project.make(:namespace => 'jeffkreeftmeijer', :name => 'srcfolio')
-    
+
+    @owner =    Contributor.make(:login => 'jeffkreeftmeijer')
+    @project =  Project.make(:namespace => 'jeffkreeftmeijer', :name => 'srcfolio')
+
     network_meta_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../stubs/network_meta.json')).read
     @network_meta = HTTParty::Response.new(JSON(network_meta_stub_file), network_meta_stub_file, 200, 'OK')
-    Contributor.all.each do |contributor|
-      contributor.contributions = []
-    end
+
+    network_data_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../stubs/network_data.json')).read
+    @network_data = HTTParty::Response.new(JSON(network_data_stub_file), network_data_stub_file, 200, 'OK')
+    Fetcher::Repository.stub!(:get).
+      with('/jeffkreeftmeijer/srcfolio/network_data_chunk', :query => {:nethash => '0a54d8ce980e06006bd7fd00b4319c944622b5d8'}).
+      and_return(@network_data)
   end
 
   describe '.fetch_all' do
@@ -91,7 +95,8 @@ describe Fetcher::Network do
         and_return(@network_meta)
 
       Fetcher::Network.should_receive(:get).
-        with('/jeffkreeftmeijer/srcfolio/network_data', :query => {:nethash => '0a54d8ce980e06006bd7fd00b4319c944622b5d8'})
+        with('/jeffkreeftmeijer/srcfolio/network_data_chunk', :query => {:nethash => '0a54d8ce980e06006bd7fd00b4319c944622b5d8'}).
+        and_return(@network_data)
 
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
     end
@@ -99,7 +104,9 @@ describe Fetcher::Network do
 
   it 'should link contributors to projects' do
     Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
-    @contributor.contributions.should_not be_empty
-    @contributor.contributions.first.should be_instance_of Project
+    contributor = Contributor.find_by_login('jeffkreeftmeijer')
+    contributor.contributions.should_not be_empty
+    contributor.contributions.first.should be_instance_of Project
+    contributor.contributions.first.name.should == 'srcfolio'
   end
 end

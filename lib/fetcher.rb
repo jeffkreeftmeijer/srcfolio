@@ -8,6 +8,7 @@ module Fetcher
   class User
     include HTTParty
     base_uri 'http://github.com/api/v2/json/user/show/'
+    format :json
 
     class << self
       def fetch(github_username)
@@ -31,6 +32,7 @@ module Fetcher
   class Repository
     include HTTParty
     base_uri 'http://github.com/api/v2/json/repos/show/'
+    format :json
 
     class << self
       def fetch_all(github_username)
@@ -53,12 +55,18 @@ module Fetcher
   class Network
     include HTTParty
     base_uri 'http://github.com/'
+    format :json
 
     class << self
       def fetch_all(project_namespace, project_name)
-        network_meta = get("/#{project_namespace}/#{project_name}/network_meta")
-        get("/#{project_namespace}/#{project_name}/network_data", :query => {:nethash => network_meta['nethash']})
-        Contributor.find_by_login('jeffkreeftmeijer').contributions << Project.find_by_namespace_and_name(project_namespace, project_name)
+        network_meta = get("/#{project_namespace}/#{project_name}/network_meta")                              
+        network_data = get("/#{project_namespace}/#{project_name}/network_data_chunk", :query => {:nethash => network_meta['nethash']})
+        network_data['commits'].each do |commit|
+          if commit['login']                                                 
+            contributor = Contributor.find_or_create_by_login(commit['login'])
+            contributor.contributions << Project.find_by_namespace_and_name(project_namespace, project_name)
+          end          
+        end
       end
     end
   end
