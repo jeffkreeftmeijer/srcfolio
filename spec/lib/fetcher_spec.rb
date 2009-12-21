@@ -63,7 +63,12 @@ describe Fetcher::Repository do
       Fetcher::Repository.fetch_all_by_owner_login('jeffkreeftmeijer')
       projects = Project.all
       projects.count.should eql 3
-      projects.first.name.should ==  'wakoopa'
+      projects.first.name.should ==         'srcfolio'
+      projects.first.github_url.should ==   'http://github.com/jeffkreeftmeijer/srcfolio'
+      projects.first.description.should ==  'src{folio}'
+      projects.first.homepage.should ==     'http://srcfolio.com'
+      projects.first.fork.should ==         false           
+      projects.first.namespace.should ==    'jeffkreeftmeijer'
       projects.first.owner.should be_instance_of(Contributor)
     end
   end

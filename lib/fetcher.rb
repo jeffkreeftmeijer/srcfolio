@@ -37,8 +37,13 @@ module Fetcher
         response = get("/#{github_username}")
         response['repositories'].each do |repository|
           Project.create(
-            :name =>  repository['name'],
-            :owner => Contributor.find_by_login(github_username)
+            :name =>        repository['name'],
+            :namespace =>   repository['owner'],
+            :github_url =>  repository['url'],
+            :description => repository['description'],
+            :homepage =>    repository['homepage'],
+            :fork =>        repository['fork'],
+            :owner =>       Contributor.find_by_login(github_username)
           )
         end
       end
