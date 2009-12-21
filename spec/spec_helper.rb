@@ -9,3 +9,8 @@ Spec::Runner.configure do |config|
 end
 
 require File.expand_path(File.join(File.dirname(__FILE__), 'blueprints'))
+
+def delete_everything
+  Project.delete_all
+  Contributor.delete_all
+end
