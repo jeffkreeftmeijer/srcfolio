@@ -25,4 +25,18 @@ module Fetcher
       end
     end
   end
+  
+  class Repository
+    include HTTParty
+    base_uri 'http://github.com/api/v2/json/repos/show/'
+    
+    class << self
+      def fetch_all_by_login(github_username)
+        response = get("/#{github_username}")
+        response['repositories'].each do |repository|
+          Project.create(:name => repository['name'])
+        end
+      end
+    end
+  end
 end
