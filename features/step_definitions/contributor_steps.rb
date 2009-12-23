@@ -7,7 +7,9 @@ Given /^([^\"]*) has contributed to a project named "([^\"]*)" which is owned by
   owner = Contributor.make(:name => owner)
   project = Project.make(:name => project)
   project.owner = owner
-  contributor.contributions << project
+  project.save
+  contributor.contributions << {:project => project.id}
+  contributor.save
 end
 
 Given /^there are no contributors$/ do

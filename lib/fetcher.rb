@@ -62,10 +62,11 @@ module Fetcher
         network_meta = get("/#{project_namespace}/#{project_name}/network_meta")
         network_data = get("/#{project_namespace}/#{project_name}/network_data_chunk", :query => {:nethash => network_meta['nethash']})
         network_data['commits'].each do |commit|
-          if commit['login'] && commit['space'] == 1                                                 
+          if commit['login'] && commit['space'] == 1
             contributor = Contributor.find_or_create_by_login(commit['login'])
-            contributor.contributions << Project.find_by_namespace_and_name(project_namespace, project_name)
-          end          
+            contributor.contributions << {'project' => Project.find_by_namespace_and_name(project_namespace, project_name).id}
+            contributor.save
+          end
         end
       end
     end

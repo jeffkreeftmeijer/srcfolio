@@ -8,4 +8,5 @@ class Project
   key :description, String
   key :homepage,    String
   key :fork,        Boolean
+  timestamps!
 end

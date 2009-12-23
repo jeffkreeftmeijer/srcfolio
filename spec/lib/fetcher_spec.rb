@@ -110,16 +110,17 @@ describe Fetcher::Network do
   it 'should link contributors to projects' do
     Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
     contributor = Contributor.find_by_login('jeffkreeftmeijer')
-    contributor.contributions.should_not be_empty
-    contributor.contributions.first.should be_instance_of Project
-    contributor.contributions.first.name.should == 'srcfolio'
+    contributor.contributions.should_not be_empty 
+    project = Project.find contributor.contributions.first['project']
+    project.should be_instance_of Project
+    project.name.should == 'srcfolio'
   end
 
   it 'should create contributors if they do not exist yet' do
     Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
     Contributor.find_by_login('bob').should_not be_nil
   end
-  
+
   it 'should only index contributors that have committed to space 1' do
     Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
     Contributor.find_by_login('charlie').should be_nil
