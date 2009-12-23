@@ -10,6 +10,4 @@ class Contributor
   key :email,         String
   key :contributions, Array
   timestamps!               
-  
-  #many :contributions, :class => Project
 end
