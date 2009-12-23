@@ -117,6 +117,11 @@ describe Fetcher::Network do
 
   it 'should create contributors if they do not exist yet' do
     Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
-    contributor = Contributor.find_by_login('bob').should_not be_nil
+    Contributor.find_by_login('bob').should_not be_nil
+  end
+  
+  it 'should only index contributors that have committed to space 1' do
+    Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
+    Contributor.find_by_login('charlie').should be_nil
   end
 end
