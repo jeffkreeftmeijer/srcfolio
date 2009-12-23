@@ -83,7 +83,12 @@ describe Fetcher::Network do
 
     network_data_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../stubs/network_data.json')).read
     @network_data = HTTParty::Response.new(JSON(network_data_stub_file), network_data_stub_file, 200, 'OK')
-    Fetcher::Repository.stub!(:get).
+
+    Fetcher::Network.stub!(:get).
+      with('/jeffkreeftmeijer/srcfolio/network_meta').
+      and_return(@network_meta)
+
+    Fetcher::Network.stub!(:get).
       with('/jeffkreeftmeijer/srcfolio/network_data_chunk', :query => {:nethash => '0a54d8ce980e06006bd7fd00b4319c944622b5d8'}).
       and_return(@network_data)
   end
@@ -108,5 +113,10 @@ describe Fetcher::Network do
     contributor.contributions.should_not be_empty
     contributor.contributions.first.should be_instance_of Project
     contributor.contributions.first.name.should == 'srcfolio'
+  end
+
+  it 'should create contributors if they do not exist yet' do
+    Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
+    contributor = Contributor.find_by_login('bob').should_not be_nil
   end
 end

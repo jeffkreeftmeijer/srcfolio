@@ -59,9 +59,10 @@ module Fetcher
 
     class << self
       def fetch_all(project_namespace, project_name)
-        network_meta = get("/#{project_namespace}/#{project_name}/network_meta")                              
+        network_meta = get("/#{project_namespace}/#{project_name}/network_meta")
         network_data = get("/#{project_namespace}/#{project_name}/network_data_chunk", :query => {:nethash => network_meta['nethash']})
         network_data['commits'].each do |commit|
+          #puts commit['login']
           if commit['login']                                                 
             contributor = Contributor.find_or_create_by_login(commit['login'])
             contributor.contributions << Project.find_by_namespace_and_name(project_namespace, project_name)
