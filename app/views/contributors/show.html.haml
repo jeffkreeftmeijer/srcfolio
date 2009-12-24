@@ -2,4 +2,6 @@
 
 %ul#contributions
   - @contributions.each do |contribution|
-    %li= "#{contribution.name}  (owned by #{contribution.owner.name})"
+    .project
+      %h1= contribution.name
+      = "Owned by #{contribution.owner.name}"
