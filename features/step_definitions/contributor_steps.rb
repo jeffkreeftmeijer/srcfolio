@@ -16,13 +16,18 @@ Given /^there are no contributors$/ do
   Contributor.delete_all
 end
 
-Given /^([^\"]*) has ([^\"]*) commits of ([^\"]*) on ([^\"]*)$/ do |contributor, commits, total_commits, project_name|
+Given /^([^\"]*) has ([^\"]*) commits of ([^\"]*) on ([^\"]*)$/ do |contributor, commits, total_commits, project|
    contributor = Contributor.find_by_name(contributor)
-   project = Project.find_by_name(project_name)
+   project = Project.find_by_name(project)
    project.commits = total_commits.to_i
    project.save   
-   contributor.contributions << {:project => project.id, :commits => commits.to_i}
+   contributor.contributions.first.merge!({:project => project.id, :commits => commits.to_i})
    contributor.save
 end
 
-
+Given /^([^\"]*) started working on ([^\"]*) on ([^\"]*)$/ do |contributor, project, started|
+  contributor = Contributor.find_by_name(contributor)
+  project = Project.find_by_name(project)
+  contributor.contributions.first.merge!({:started_at => started})
+  contributor.save
+end

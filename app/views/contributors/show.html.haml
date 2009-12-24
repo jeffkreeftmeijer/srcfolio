@@ -7,3 +7,5 @@
       = "Owned by #{contribution[:project].owner.name}"
       %strong Commits
       %span= "#{contribution[:commits]}/#{contribution[:project].commits}"
+      = contribution[:started_at]
+      
