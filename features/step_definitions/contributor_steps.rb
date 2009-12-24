@@ -15,3 +15,14 @@ end
 Given /^there are no contributors$/ do
   Contributor.delete_all
 end
+
+Given /^([^\"]*) has ([^\"]*) commits of ([^\"]*) on ([^\"]*)$/ do |contributor, commits, total_commits, project_name|
+   contributor = Contributor.find_by_name(contributor)
+   project = Project.find_by_name(project_name)
+   project.commits = total_commits.to_i
+   project.save   
+   contributor.contributions << {:project => project.id, :commits => commits.to_i}
+   contributor.save
+end
+
+

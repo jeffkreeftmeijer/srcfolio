@@ -21,8 +21,10 @@ Feature: Contributors
   Scenario: A user views a contributor's page who has contributed to some projects
     Given a contributor exists with a login of "al1ce" and a name of "Alice"
     And Alice has contributed to a project named "project1" which is owned by Bob
+    And Alice has 14 commits of 67 on project1
     When I go to Alice's page
     Then I should see "project1"
+    And I should see "14/67"
     And I should see "Owned by Bob"
 
   Scenario: A user tries to view a contributor page that doesn't exist
