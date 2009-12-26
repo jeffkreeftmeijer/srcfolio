@@ -23,6 +23,7 @@ Feature: Contributors
     And Alice has contributed to a project named "project1"
     When I go to Alice's page
     Then I should see "project1"
+    And I should see "A really cool project"
     And I should see "10/100"
     And I should see "January 1 2009"
     And I should see "December 1 2009"

@@ -11,4 +11,3 @@ Given /^([^\"]*) has contributed to a project named "([^\"]*)"$/ do |name, proje
   contributor.contributions << {:project => Project.make(:name => project).id, :started_at => 'January 1 2009', :stopped_at => 'December 1 2009', :commits => 10}
   contributor.save
 end
-

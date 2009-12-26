@@ -5,7 +5,12 @@
     .project
       %h1= contribution['project'].name
       = "Owned by #{contribution['project'].owner.name}"
-      %strong Commits
-      %span= "#{contribution['commits']}/#{contribution['project'].commits}"
-      = contribution['started_at']
-      = contribution['stopped_at']
+      
+      %p= contribution['project'].description
+      
+      %ul.details
+        %li
+          %strong Commits
+          %span= "#{contribution['commits']}/#{contribution['project'].commits}"
+        %li= contribution['started_at']
+        %li= contribution['stopped_at']

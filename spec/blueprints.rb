@@ -7,7 +7,8 @@ Contributor.blueprint do
 end
 
 Project.blueprint do
-  name    'project'
-  owner   Contributor.make
-  commits 100
+  name        'project'
+  description 'A really cool project'
+  owner       Contributor.make
+  commits     100
 end

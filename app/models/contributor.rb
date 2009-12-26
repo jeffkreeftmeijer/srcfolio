@@ -4,6 +4,7 @@ class Contributor
   key :login,         String
   key :name,          String
   key :namespace,     String
+  key :description,   String
   key :company,       String
   key :location,      String
   key :website,       String
