@@ -23,8 +23,6 @@ module Fetcher
           :website =>   response['user']['blog'],
           :email =>     response['user']['email']
         )
-
-        Fetcher::Repository.fetch_all(contributor.login)
       end
     end
   end
