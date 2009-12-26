@@ -49,6 +49,6 @@ describe ContributorsController do
   it 'should show a contributor page with contributions' do
     get 'show', :id => @contributor_with_contributions.login
     assigns[:contributions].count.should == 1
-    assigns[:contributions].each {|c| c[:project].should be_instance_of Project }
+    assigns[:contributions].each {|c| c['project'].should be_instance_of Project }
   end
 end
