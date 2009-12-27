@@ -1,5 +1,5 @@
 .project
-  %h1= contribution['project'].name
+  %h2= contribution['project'].name
   
   -if contribution['project'].owner.login != @contributor.login
     Owned by
@@ -9,11 +9,11 @@
   
   %ul.details
     %li
-      %strong Commits
+      %strong commits
       %span= "#{contribution['commits']}/#{contribution['project'].commits}"
     %li
-      %strong From
+      %strong from
       %span=contribution['started_at']
     %li
-      %strong To
+      %strong to
       %span=contribution['stopped_at']
