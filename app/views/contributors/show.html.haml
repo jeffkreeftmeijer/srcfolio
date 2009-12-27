@@ -1,3 +1,6 @@
 %h1= @contributor.name
 
-=render :partial => 'contribution', :collection => @contributions
+-if @contributions.empty?
+  %h2 We couldn't find any projects Alice has contributed to.
+-else
+  =render :partial => 'contribution', :collection => @contributions
