@@ -1,6 +1,6 @@
 %h1= @contributor.name
 
 -if @contributions.empty?
-  %h2 We couldn't find any projects Alice has contributed to.
+  %h2= "We couldn't find any projects #{@contributor.name} has contributed to."
 -else
   =render :partial => 'contribution', :collection => @contributions
