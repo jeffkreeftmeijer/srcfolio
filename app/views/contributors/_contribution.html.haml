@@ -1,0 +1,19 @@
+.project
+  %h1= contribution['project'].name
+  
+  -if contribution['project'].owner.login != @contributor.login
+    Owned by
+    = link_to(contribution['project'].owner.name, contributor_path(contribution['project'].owner.login))
+  
+  %p= contribution['project'].description
+  
+  %ul.details
+    %li
+      %strong Commits
+      %span= "#{contribution['commits']}/#{contribution['project'].commits}"
+    %li
+      %strong From
+      %span=contribution['started_at']
+    %li
+      %strong To
+      %span=contribution['stopped_at']

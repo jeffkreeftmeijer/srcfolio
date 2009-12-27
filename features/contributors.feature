@@ -27,7 +27,16 @@ Feature: Contributors
     And I should see "10/100"
     And I should see "January 1 2009"
     And I should see "December 1 2009"
-    And I should see "Owned by Bob"
+    And I should not see "Owned by"
+  
+  Scenario: A user views a contributor's page who has contributed to a project owned by somebody else
+    Given a contributor exists with a login of "al1ce" and a name of "Alice"
+    And Alice has contributed to a project named "project1" which is owned by Bob
+    When I go to Alice's page
+    Then I should see "Owned by"
+    And I should see "Bob"
+    When I follow "Bob"
+    Then I should be on Bob's page
 
   Scenario: A user tries to view a contributor page that doesn't exist
     Given there are no contributors

@@ -1,16 +1,3 @@
 %h1= @contributor.name
 
-%ul#contributions
-  - @contributions.each do |contribution|
-    .project
-      %h1= contribution['project'].name
-      = "Owned by #{contribution['project'].owner.name}"
-      
-      %p= contribution['project'].description
-      
-      %ul.details
-        %li
-          %strong Commits
-          %span= "#{contribution['commits']}/#{contribution['project'].commits}"
-        %li= contribution['started_at']
-        %li= contribution['stopped_at']
+=render :partial => 'contribution', :collection => @contributions
