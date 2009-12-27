@@ -9,10 +9,10 @@ end
 Given /^([^\"]*) has contributed to a project named "([^\"]*)"$/ do |name, project|
   contributor = Contributor.find_by_name(name)
   contributor.contributions << {
-    :project => Project.make(:name => project, :owner => contributor).id,
+    :project => Project.make(:name => project, :owner => contributor, :commits => 46).id,
     :started_at => 'January 1 2009',
     :stopped_at => 'December 1 2009',
-    :commits => 10
+    :commits => 12
   }
   contributor.save
 end
@@ -23,7 +23,7 @@ Given /^([^\"]*) has contributed to a project named "([^\"]*)" which is owned by
     :project => Project.make(:name => project, :owner => Contributor.make(:name => owner)).id,
     :started_at => 'January 1 2009',
     :stopped_at => 'December 1 2009',
-    :commits => 10
+    :commits => 12
   }
   contributor.save
 end

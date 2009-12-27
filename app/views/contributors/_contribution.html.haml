@@ -10,7 +10,8 @@
   %ul.details
     %li
       %strong commits
-      %span= "#{contribution['commits']}/#{contribution['project'].commits}"
+      = "#{contribution['commits']}"
+      %span= "#{contribution['commits']}/#{contribution['project'].commits} (#{number_to_percentage(contribution['commits'].to_f / contribution['project'].commits.to_f * 100, :precision => 2)})"
     %li
       %strong from
       %span=contribution['started_at']
