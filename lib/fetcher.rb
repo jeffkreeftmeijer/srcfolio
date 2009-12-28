@@ -125,16 +125,15 @@ module Fetcher
         contributions.values.each do |contribution|
           contributor = Contributor.find_or_create_by_login(contribution[:login])
           
-          contributor.contributions.select{|c| c['project'] == project.id}.each do |existing_contribution|
-            contributor.contributions.delete(existing_contribution)
-          end
+          existing_contribution = contributor.contributions.select{|c| c['project'] == project.id}.first
+          contributor.contributions.delete(existing_contribution)
           
-          contributor.contributions << {
+          contributor.contributions << (existing_contribution || {}).merge({
             'project' =>    project.id,
             'commits' =>    contribution[:commits],
             'started_at' => contribution[:started_at],
             'stopped_at' => contribution[:stopped_at]
-          }
+          })
           contributor.save
         end
       end

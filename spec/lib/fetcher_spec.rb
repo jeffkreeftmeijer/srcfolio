@@ -221,6 +221,7 @@ describe Fetcher::Network do
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
       contributor = Contributor.find_by_login('jeffkreeftmeijer')
       contributor.contributions.length.should == 1
+      contributor.contributions.first['member'].should == true
     end
 
     it 'should create contributors if they do not exist yet' do
