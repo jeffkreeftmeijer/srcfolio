@@ -14,9 +14,9 @@ module Fetcher
       def fetch(github_username)
         response = get("/#{github_username}")
         raise(NotFound, "No Github user was found named \"#{github_username}\"") if response.code == 404
-
-        contributor = Contributor.create(
-          :login =>     response['user']['login'],
+        
+        contributor = Contributor.find_or_create_by_login(response['user']['login'])
+        contributor.update_attributes!(
           :name =>      response['user']['name'],
           :company =>   response['user']['company'],
           :location =>  response['user']['location'],
@@ -44,9 +44,12 @@ module Fetcher
             :description => repository['description'],
             :homepage =>    repository['homepage'],
             :fork =>        repository['fork'],
+            :visible =>     repository['fork']? false : true,
             :owner =>       Contributor.find_by_login(github_username)
           )  
-          contributor.ownerships << project
+          contributor.ownerships << {
+            'project' => project.id
+          }
         end
         contributor.save 
       end
@@ -64,7 +67,9 @@ module Fetcher
         project = Project.find_by_namespace_and_name(project_namespace, project_name)
         collaborators['collaborators'].each do |collaborator|
           contributor = Contributor.find_or_create_by_login(collaborator)
-          contributor.memberships << project
+          contributor.memberships << {
+            'project' => project.id
+          }
           contributor.save
         end
       end

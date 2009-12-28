@@ -9,5 +9,6 @@ class Project
   key :homepage,    String
   key :fork,        Boolean
   key :commits,     Integer
+  key :visible,     Boolean
   timestamps!
 end

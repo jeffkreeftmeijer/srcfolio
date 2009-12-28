@@ -28,7 +28,16 @@ describe Fetcher::User do
       contributor.website.should ==   'http://jeffkreeftmeijer.nl'
       contributor.email.should ==     'jeff@kreeftmeijer.nl'
     end
-
+    
+    it 'should update an existing user' do
+      Contributor.delete_all
+      Contributor.make(:login => 'jeffkreeftmeijer')
+      Fetcher::User.fetch('jeffkreeftmeijer')
+      contributors = Contributor.find_all_by_login('jeffkreeftmeijer')
+      contributors.length.should == 1
+      contributors.first.name.should == 'Jeff Kreeftmeijer'
+    end
+    
     it 'should raise an error when the specified user could not be found' do
       begin
       Fetcher::User.fetch('idontexist').should raise_error(NotFound, 'No Github user was found named "idontexist"')
@@ -65,6 +74,7 @@ describe Fetcher::Repository do
       projects.first.description.should ==  'src{folio}'
       projects.first.homepage.should ==     'http://srcfolio.com'
       projects.first.fork.should ==         false
+      projects.first.visible.should ==      true
       projects.first.namespace.should ==    'jeffkreeftmeijer'
       projects.first.owner.should be_instance_of(Contributor)
     end
@@ -73,6 +83,12 @@ describe Fetcher::Repository do
       Fetcher::Repository.fetch_all('jeffkreeftmeijer')
       contributor = Contributor.find_by_login('jeffkreeftmeijer')
       contributor.ownerships.length.should == 3
+    end
+
+    it 'should make forks invisible' do
+     Fetcher::Repository.fetch_all('jeffkreeftmeijer')
+     project = Project.find_by_namespace_and_name('jeffkreeftmeijer', 'gemcutter')
+     project.visible?.should == false
     end
   end
 end

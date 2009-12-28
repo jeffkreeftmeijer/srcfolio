@@ -3,7 +3,6 @@ class Contributor
 
   key :login,         String
   key :name,          String
-  key :namespace,     String
   key :description,   String
   key :company,       String
   key :location,      String
@@ -12,5 +11,9 @@ class Contributor
   key :contributions, Array
   key :memberships,   Array
   key :ownerships,    Array
-  timestamps!               
+  timestamps!
+  
+  def best_name
+    name || login
+  end              
 end

@@ -2,4 +2,4 @@
 
 %ul
 	- @contributors.each do |contributor|
-		%li= link_to(contributor.name, contributor_path(contributor.login))
+		%li= link_to(contributor.best_name, contributor_path(contributor.login))

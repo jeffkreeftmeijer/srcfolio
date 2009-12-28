@@ -130,6 +130,10 @@ Then /^(?:|I )should see "([^\"]*)" within "([^\"]*)"$/ do |text, selector|
   end
 end
 
+Then /^I should see "([^\"]*)" once$/ do |text|
+  response.body.scan(text).count.should == 1
+end
+
 Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
   regexp = Regexp.new(regexp)
   response.should contain(regexp)
