@@ -28,7 +28,7 @@ describe Fetcher::User do
       contributor.website.should ==   'http://jeffkreeftmeijer.nl'
       contributor.email.should ==     'jeff@kreeftmeijer.nl'
     end
-    
+
     it 'should update an existing user' do
       Contributor.delete_all
       Contributor.make(:login => 'jeffkreeftmeijer')
@@ -37,7 +37,7 @@ describe Fetcher::User do
       contributors.length.should == 1
       contributors.first.name.should == 'Jeff Kreeftmeijer'
     end
-    
+
     it 'should raise an error when the specified user could not be found' do
       begin
       Fetcher::User.fetch('idontexist').should raise_error(NotFound, 'No Github user was found named "idontexist"')
@@ -86,6 +86,20 @@ describe Fetcher::Repository do
       contributor.contributions.first['owner'].should == true
     end
 
+    it 'should only link the projects once' do
+      contributor = Contributor.find_by_login('jeffkreeftmeijer')
+      contributor.contributions = [
+        {
+          'project' => Project.make(:namespace => 'jeffkreeftmeijer', :name => 'srcfolio').id,
+          'owner'   => true
+        }
+      ]
+      contributor.save
+      Fetcher::Repository.fetch_all('jeffkreeftmeijer')
+      contributor = Contributor.find_by_login('jeffkreeftmeijer')
+      contributor.contributions.length.should == 3
+    end
+
     it 'should make forks invisible' do
      Fetcher::Repository.fetch_all('jeffkreeftmeijer')
      project = Project.find_by_namespace_and_name('jeffkreeftmeijer', 'gemcutter')
@@ -122,6 +136,21 @@ describe Fetcher::Collaborator do
       contributor = Contributor.find_by_login('jeffkreeftmeijer')
       contributor.contributions.length.should == 1
       contributor.contributions.first['member'].should == true
+    end
+
+    it 'should only link the projects once' do
+      Project.delete_all
+      contributor = Contributor.find_by_login('jeffkreeftmeijer')
+      contributor.contributions = [
+        {
+          'project' => Project.make(:namespace => 'jeffkreeftmeijer', :name => 'srcfolio').id,
+          'member'   => true
+        }
+      ]
+      contributor.save
+      Fetcher::Collaborator.fetch_all('jeffkreeftmeijer', 'srcfolio')
+      contributor = Contributor.find_by_login('jeffkreeftmeijer')
+      contributor.contributions.length.should == 1
     end
 
     it 'should create contributors if they do not exist yet' do
@@ -177,6 +206,21 @@ describe Fetcher::Network do
       contributor.contributions.first['commits'].should == 21
       contributor.contributions.first['started_at'].should == '2009-12-13 08:03:03'.to_time
       contributor.contributions.first['stopped_at'].should == '2009-12-21 02:12:06'.to_time
+    end
+    
+    it 'should only link the projects once' do
+      Project.delete_all
+      contributor = Contributor.find_by_login('jeffkreeftmeijer')
+      contributor.contributions = [
+        {
+          'project' => Project.make(:namespace => 'jeffkreeftmeijer', :name => 'srcfolio').id,
+          'member'   => true
+        }
+      ]
+      contributor.save
+      Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
+      contributor = Contributor.find_by_login('jeffkreeftmeijer')
+      contributor.contributions.length.should == 1
     end
 
     it 'should create contributors if they do not exist yet' do

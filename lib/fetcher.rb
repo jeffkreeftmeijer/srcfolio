@@ -14,7 +14,7 @@ module Fetcher
       def fetch(github_username)
         response = get("/#{github_username}")
         raise(NotFound, "No Github user was found named \"#{github_username}\"") if response.code == 404
-        
+
         contributor = Contributor.find_or_create_by_login(response['user']['login'])
         contributor.update_attributes!(
           :name =>      response['user']['name'],
@@ -37,41 +37,50 @@ module Fetcher
         response = get("/#{github_username}")
         contributor = Contributor.find_by_login(github_username)
         response['repositories'].each do |repository|
-          project = Project.create(
-            :name =>        repository['name'],
-            :namespace =>   repository['owner'],
+         
+          project = Project.find_or_create_by_namespace_and_name(
+            repository['owner'],
+            repository['name']
+          )
+
+          project.update_attributes!(
             :github_url =>  repository['url'],
             :description => repository['description'],
             :homepage =>    repository['homepage'],
             :fork =>        repository['fork'],
             :visible =>     repository['fork']? false : true,
             :owner =>       Contributor.find_by_login(github_username)
-          )  
-          contributor.contributions << {
-            'project' =>  project.id,
-            'owner' =>   true
-          }
+          )
+
+          unless contributor.contributions.map{|c| c['project']}.include? project.id
+            contributor.contributions << {
+              'project' =>  project.id,
+              'owner' =>   true
+            }
+          end
         end
-        contributor.save 
+        contributor.save
       end
     end
   end
-  
+
   class Collaborator
     include HTTParty
     base_uri 'http://github.com/api/v2/json/repos/show/'
     format :json
-    
+
     class << self
       def fetch_all(project_namespace, project_name)
         collaborators = get("/#{project_namespace}/#{project_name}/collaborators")
         project = Project.find_by_namespace_and_name(project_namespace, project_name)
         collaborators['collaborators'].each do |collaborator|
           contributor = Contributor.find_or_create_by_login(collaborator)
-          contributor.contributions << {
-            'project' =>  project.id,
-            'member' =>   true
-          }
+          unless contributor.contributions.map{|c| c['project']}.include? project.id
+            contributor.contributions << {
+              'project' =>  project.id,
+              'member' =>   true
+            }
+          end
           contributor.save
         end
       end
@@ -115,6 +124,11 @@ module Fetcher
 
         contributions.values.each do |contribution|
           contributor = Contributor.find_or_create_by_login(contribution[:login])
+          
+          contributor.contributions.select{|c| c['project'] == project.id}.each do |existing_contribution|
+            contributor.contributions.delete(existing_contribution)
+          end
+          
           contributor.contributions << {
             'project' =>    project.id,
             'commits' =>    contribution[:commits],
