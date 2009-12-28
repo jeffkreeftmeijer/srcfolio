@@ -17,12 +17,12 @@ Feature: Contributors
     When I go to Alice's page
     Then I should see "Alice"
 		And I should not see "We've never heard of “al1ce” before."
-		
+
   Scenario: A user views a contributor's page that has no contributions
     Given a contributor exists with a login of "al1ce" and a name of "Alice"
     When I go to Alice's page
     Then I should see "We couldn't find any projects Alice has contributed to."
-    
+
   Scenario: A user views a contributor's page who has contributed to a project
     Given a contributor exists with a login of "al1ce" and a name of "Alice"
     And Alice has contributed to a project named "project1"
@@ -30,10 +30,10 @@ Feature: Contributors
     Then I should see "project1"
     And I should see "A really cool project"
     And I should see "12/46 (26.09%)"
-    And I should see "January 1 2009"
-    And I should see "December 1 2009"
+    And I should see "January 2009"
+    And I should see "December 2009"
     And I should not see "Owned by"
-  
+
   Scenario: A user views a contributor's page who has contributed to a project owned by somebody else
     Given a contributor exists with a login of "al1ce" and a name of "Alice"
     And Alice has contributed to a project named "project1" which is owned by Bob

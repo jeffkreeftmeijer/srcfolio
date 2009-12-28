@@ -35,8 +35,9 @@ module Fetcher
     class << self
       def fetch_all(github_username)
         response = get("/#{github_username}")
+        contributor = Contributor.find_by_login(github_username)
         response['repositories'].each do |repository|
-          Project.create(
+          project = Project.create(
             :name =>        repository['name'],
             :namespace =>   repository['owner'],
             :github_url =>  repository['url'],
@@ -44,7 +45,27 @@ module Fetcher
             :homepage =>    repository['homepage'],
             :fork =>        repository['fork'],
             :owner =>       Contributor.find_by_login(github_username)
-          )
+          )  
+          contributor.ownerships << project
+        end
+        contributor.save 
+      end
+    end
+  end
+  
+  class Collaborator
+    include HTTParty
+    base_uri 'http://github.com/api/v2/json/repos/show/'
+    format :json
+    
+    class << self
+      def fetch_all(project_namespace, project_name)
+        collaborators = get("/#{project_namespace}/#{project_name}/collaborators")
+        project = Project.find_by_namespace_and_name(project_namespace, project_name)
+        collaborators['collaborators'].each do |collaborator|
+          contributor = Contributor.find_or_create_by_login(collaborator)
+          contributor.memberships << project
+          contributor.save
         end
       end
     end
@@ -62,12 +83,38 @@ module Fetcher
         project = Project.find_by_namespace_and_name(project_namespace, project_name)
         project.commits = network_data['commits'].length
         project.save
+
+        contributions = {}
+
         network_data['commits'].each do |commit|
           if commit['login'] && commit['space'] == 1
-            contributor = Contributor.find_or_create_by_login(commit['login'])
-            contributor.contributions << {'project' => project.id}
-            contributor.save
+
+            contribution = {
+              :login =>       commit['login'],
+              :commits =>     contributions[commit['login']] ? contributions[commit['login']][:commits] += 1 : 1
+            }
+
+            contribution[:started_at] = contributions[commit['login']].nil? || contributions[commit['login']][:started_at].nil? || commit['date'].to_time < contributions[commit['login']][:started_at].to_time ?
+              commit['date'].to_time :
+              contributions[commit['login']][:started_at]
+
+            contribution[:stopped_at] = contributions[commit['login']].nil? || contributions[commit['login']][:stopped_at].nil? || commit['date'].to_time > contributions[commit['login']][:stopped_at].to_time ?
+              commit['date'].to_time :
+              contributions[commit['login']][:stopped_at]
+
+            contributions.merge!({commit['login'] => contribution})
           end
+        end
+
+        contributions.values.each do |contribution|
+          contributor = Contributor.find_or_create_by_login(contribution[:login])
+          contributor.contributions << {
+            'project' =>    project.id,
+            'commits' =>    contribution[:commits],
+            'started_at' => contribution[:started_at],
+            'stopped_at' => contribution[:stopped_at]
+          }
+          contributor.save
         end
       end
     end

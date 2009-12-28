@@ -68,6 +68,47 @@ describe Fetcher::Repository do
       projects.first.namespace.should ==    'jeffkreeftmeijer'
       projects.first.owner.should be_instance_of(Contributor)
     end
+
+    it 'should add the projects to the owners ownerships' do
+      Fetcher::Repository.fetch_all('jeffkreeftmeijer')
+      contributor = Contributor.find_by_login('jeffkreeftmeijer')
+      contributor.ownerships.length.should == 3
+    end
+  end
+end
+
+describe Fetcher::Collaborator do
+  before do
+    delete_everything
+
+    @owner =    Contributor.make(:login => 'jeffkreeftmeijer')
+    @project =  Project.make(:namespace => 'jeffkreeftmeijer', :name => 'srcfolio')
+
+    collaborator_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../stubs/collaborators.json')).read
+    @collaborators = HTTParty::Response.new(JSON(collaborator_stub_file), collaborator_stub_file, 200, 'OK')
+
+    Fetcher::Collaborator.stub!(:get).
+      with('/jeffkreeftmeijer/srcfolio/collaborators').
+      and_return(@collaborators)
+  end
+
+  describe '.fetch_all' do
+    it 'should call to github to get the project collaborators' do
+      Fetcher::Collaborator.should_receive(:get).
+        with('/jeffkreeftmeijer/srcfolio/collaborators').
+        and_return(@collaborators)
+      Fetcher::Collaborator.fetch_all('jeffkreeftmeijer', 'srcfolio')
+    end
+
+    it 'should link projects to collaborators' do
+      Fetcher::Collaborator.fetch_all('jeffkreeftmeijer', 'srcfolio')
+      Contributor.find_by_login('jeffkreeftmeijer').memberships.length.should == 1
+    end
+
+    it 'should create contributors if they do not exist yet' do
+      Fetcher::Collaborator.fetch_all('jeffkreeftmeijer', 'srcfolio')
+      Contributor.find_by_login('bob').should_not be_nil
+    end
   end
 end
 
@@ -87,7 +128,7 @@ describe Fetcher::Network do
     Fetcher::Network.stub!(:get).
       with('/jeffkreeftmeijer/srcfolio/network_meta').
       and_return(@network_meta)
-    
+
     Fetcher::Network.stub!(:get).
       with('/jeffkreeftmeijer/srcfolio/network_data_chunk', :query => {:nethash => '0a54d8ce980e06006bd7fd00b4319c944622b5d8'}).
       and_return(@network_data)
@@ -105,29 +146,33 @@ describe Fetcher::Network do
 
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
     end
-  end
-  
-  it 'should link contributors to projects' do
-    Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
-    contributor = Contributor.find_by_login('jeffkreeftmeijer')
-    contributor.contributions.should_not be_empty 
-    project = Project.find contributor.contributions.first['project']
-    project.should be_instance_of Project
-    project.name.should == 'srcfolio'
-  end
 
-  it 'should create contributors if they do not exist yet' do
-    Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
-    Contributor.find_by_login('bob').should_not be_nil
-  end
+    it 'should link contributors to each project once and set the commit count and commit dates' do
+      Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
+      contributor = Contributor.find_by_login('jeffkreeftmeijer')
+      contributor.contributions.should_not be_empty
+      contributor.contributions.length.should == 1
+      project = Project.find contributor.contributions.first['project']
+      project.should be_instance_of Project
+      project.name.should == 'srcfolio'
+      contributor.contributions.first['commits'].should == 21
+      contributor.contributions.first['started_at'].should == '2009-12-13 08:03:03'.to_time
+      contributor.contributions.first['stopped_at'].should == '2009-12-21 02:12:06'.to_time
+    end
 
-  it 'should only index contributors that have committed to space 1' do
-    Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
-    Contributor.find_by_login('charlie').should be_nil
-  end
-  
-  it 'should set the commit count for the project' do
-    Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
-    Project.find_by_namespace_and_name('jeffkreeftmeijer', 'srcfolio').commits.should == 23
+    it 'should create contributors if they do not exist yet' do
+      Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
+      Contributor.find_by_login('bob').should_not be_nil
+    end
+
+    it 'should only index contributors that have committed to space 1' do
+      Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
+      Contributor.find_by_login('charlie').should be_nil
+    end
+
+    it 'should set the commit count for the project' do
+      Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
+      Project.find_by_namespace_and_name('jeffkreeftmeijer', 'srcfolio').commits.should == 23
+    end
   end
 end

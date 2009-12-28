@@ -10,5 +10,7 @@ class Contributor
   key :website,       String
   key :email,         String
   key :contributions, Array
+  key :memberships,   Array
+  key :ownerships,    Array
   timestamps!               
 end
