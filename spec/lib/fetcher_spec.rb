@@ -233,8 +233,8 @@ describe Fetcher::Network do
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
       Contributor.find_by_login('charlie').should be_nil
     end
-
-    it 'should set the commit count for the project' do
+        
+    it 'should set the commit count for the project and merge contributors without a login but matching names' do
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
       Project.find_by_namespace_and_name('jeffkreeftmeijer', 'srcfolio').commits.should == 23
     end

@@ -101,9 +101,13 @@ module Fetcher
         project.save
 
         contributions = {}
-
+                
         network_data['commits'].each do |commit|
-          if commit['login'] && commit['space'] == 1
+          if commit['space'] == 1
+            if commit['login'].empty?
+              contributor = network_data['commits'].select{|c| c['author'] == commit['author'] && !c['login'].empty?}.first
+              commit['login'] = contributor ? contributor['login'] : ''
+            end
 
             contribution = {
               :login =>       commit['login'],
