@@ -82,7 +82,7 @@ describe Fetcher::Repository do
     it 'should add the projects to the owners ownerships' do
       Fetcher::Repository.fetch_all('jeffkreeftmeijer')
       contributor = Contributor.find_by_login('jeffkreeftmeijer')
-      contributor.ownerships.length.should == 3
+      contributor.contributions.length.should == 3
     end
 
     it 'should make forks invisible' do
@@ -118,7 +118,7 @@ describe Fetcher::Collaborator do
 
     it 'should link projects to collaborators' do
       Fetcher::Collaborator.fetch_all('jeffkreeftmeijer', 'srcfolio')
-      Contributor.find_by_login('jeffkreeftmeijer').memberships.length.should == 1
+      Contributor.find_by_login('jeffkreeftmeijer').contributions.length.should == 1
     end
 
     it 'should create contributors if they do not exist yet' do

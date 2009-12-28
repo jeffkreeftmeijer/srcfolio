@@ -47,8 +47,9 @@ module Fetcher
             :visible =>     repository['fork']? false : true,
             :owner =>       Contributor.find_by_login(github_username)
           )  
-          contributor.ownerships << {
-            'project' => project.id
+          contributor.contributions << {
+            'project' =>  project.id,
+            'member' =>   true
           }
         end
         contributor.save 
@@ -67,8 +68,9 @@ module Fetcher
         project = Project.find_by_namespace_and_name(project_namespace, project_name)
         collaborators['collaborators'].each do |collaborator|
           contributor = Contributor.find_or_create_by_login(collaborator)
-          contributor.memberships << {
-            'project' => project.id
+          contributor.contributions << {
+            'project' =>  project.id,
+            'member' =>   true
           }
           contributor.save
         end

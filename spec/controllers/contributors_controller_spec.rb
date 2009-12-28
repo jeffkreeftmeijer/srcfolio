@@ -21,26 +21,6 @@ describe ContributorsController do
         }
       ]
     )
-    
-    @contributor_with_ownerships = Contributor.make(
-      :login => '3ric',
-      :name => 'Eric',
-      :ownerships => [
-        {
-          :project => project.id
-        }
-      ]
-    )
-    
-    @contributor_with_memberships = Contributor.make(
-      :login => 'fr4nk',
-      :name => 'Frank',
-      :memberships => [
-        {
-          :project => project.id
-        }
-      ]
-    )
   end
 
   it 'should show a list of contributors' do
@@ -72,24 +52,6 @@ describe ContributorsController do
     assigns[:contributions].each do |c|
        c['project'].should be_instance_of Project
        c['project'].visible?.should eql true
-     end
-  end
-  
-  it 'should show a contributor page with ownerships' do
-    get 'show', :id => @contributor_with_ownerships.login
-    assigns[:ownerships].count.should == 1
-    assigns[:ownerships].each do |o|
-       o['project'].should be_instance_of Project
-       o['project'].visible?.should eql true
-     end
-  end
-  
-  it 'should show a contributor page with memberships' do
-    get 'show', :id => @contributor_with_memberships.login
-    assigns[:memberships].count.should == 1
-    assigns[:memberships].each do |m|
-       m['project'].should be_instance_of Project
-       m['project'].visible?.should eql true
      end
   end
 end

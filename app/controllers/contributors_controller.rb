@@ -9,15 +9,5 @@ class ContributorsController < ApplicationController
     end
 
     @contributions = @contributor.contributions.map{|c| c.merge({'project' => Project.find(c['project'])})}.select{|c| c['project'].visible? }
-    @ownerships =    @contributor.ownerships.map{|o| o.merge({'project' => Project.find(o['project'])})}.select{|c| c['project'].visible? }
-    @memberships =   @contributor.memberships.map{|m| m.merge({'project' => Project.find(m['project'])})}.select{|c| c['project'].visible?}
-
-    @memberships.each do |membership|
-      @memberships.delete(membership) if @contributions.map{|c| c['project'].id}.include? membership['project'].id
-    end
-
-    @ownerships.each do |ownership|
-      @ownerships.delete(ownership) if @contributions.map{|c| c['project'].id}.include? ownership['project'].id
-    end
   end
 end

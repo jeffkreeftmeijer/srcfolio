@@ -9,11 +9,9 @@ class Contributor
   key :website,       String
   key :email,         String
   key :contributions, Array
-  key :memberships,   Array
-  key :ownerships,    Array
   timestamps!
-  
+
   def best_name
     name || login
-  end              
+  end
 end

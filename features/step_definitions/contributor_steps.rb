@@ -39,56 +39,54 @@ end
 Given /^([^\"]*) owns a project named "([^\"]*)"$/ do |name, project|
   contributor = Contributor.find_by_name(name)
   contributor.contributions = []
-  contributor.ownerships << {
-    :project => Project.make(:name => project, :owner => contributor).id
+  contributor.contributions << {
+    :project => Project.make(:name => project, :owner => contributor).id,
+    :owner => true
   }
   contributor.save
 end
 
 Given /^([^\"]*) is in the team of a project named "([^\"]*)"$/ do |name, project|
   contributor = Contributor.find_by_name(name)
-  contributor.contributions, contributor.ownerships, contributor.memberships = []
-  contributor.memberships << {
-    :project => Project.make(:name => project).id
+  contributor.contributions = []
+  contributor.contributions << {
+    :project => Project.make(:name => project).id,
+    :member => true
   }
   contributor.save
 end
 
 Given /^([^\"]*) owns a project named "([^\"]*)" and has contributed to that project$/ do |name, project|
   contributor = Contributor.find_by_name(name)
-  contributor.contributions, contributor.ownerships, contributor.memberships = []
+  contributor.contributions = []
   project = Project.make(:name => project, :owner => contributor)
-  contributor.ownerships << {
-    :project => project.id
-  }
   contributor.contributions << {
     :project => project.id,
     :started_at => 'January 1 2009',
     :stopped_at => 'December 1 2009',
-    :commits => 12
+    :commits => 12,
+    :owner => true
   }
   contributor.save
 end
 
 Given /^([^\"]*) is in the team of a project named "([^\"]*)" and has contributed to that project$/ do |name, project|
   contributor = Contributor.find_by_name(name)
-  contributor.contributions, contributor.ownerships, contributor.memberships = []
+  contributor.contributions = []
   project = Project.make(:name => project)
-  contributor.memberships << {
-    :project => project.id
-  }
   contributor.contributions << {
     :project => project.id,
     :started_at => 'January 1 2009',
     :stopped_at => 'December 1 2009',
-    :commits => 12
+    :commits => 12,
+    :member => true
   }
   contributor.save
 end
 
 Given /^([^\"]*) has contributed to a project named "([^\"]*)", which is invisible$/ do |name, project|
   contributor = Contributor.find_by_name(name)
-  contributor.contributions, contributor.ownerships, contributor.memberships = []
+  contributor.contributions = []
   contributor.contributions << {
     :project => Project.make(:name => project, :visible => false).id,
     :started_at => 'January 1 2009',
@@ -100,18 +98,20 @@ end
 
 Given /^([^\"]*) owns a project named "([^\"]*)", which is invisible$/ do |name, project|
   contributor = Contributor.find_by_name(name)
-  contributor.contributions, contributor.ownerships, contributor.memberships = []
-  contributor.ownerships << {
-    :project => Project.make(:name => project, :owner => contributor, :visible => false).id
+  contributor.contributions = []
+  contributor.contributions << {
+    :project => Project.make(:name => project, :owner => contributor, :visible => false).id,
+    :owner => true
   }
   contributor.save
 end
 
 Given /^([^\"]*) is in the team of a project named "([^\"]*)", which is invisible$/ do |name, project|
   contributor = Contributor.find_by_name(name)
-  contributor.contributions, contributor.ownerships, contributor.memberships = []
-  contributor.memberships << {
-    :project => Project.make(:name => project, :visible => false).id
+  contributor.contributions = []
+  contributor.contributions << {
+    :project => Project.make(:name => project, :visible => false).id,
+    :member => true
   }
   contributor.save
 end
