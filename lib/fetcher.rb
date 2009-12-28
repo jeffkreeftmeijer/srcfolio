@@ -49,7 +49,7 @@ module Fetcher
           )  
           contributor.contributions << {
             'project' =>  project.id,
-            'member' =>   true
+            'owner' =>   true
           }
         end
         contributor.save 

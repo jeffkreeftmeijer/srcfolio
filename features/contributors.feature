@@ -53,6 +53,7 @@ Feature: Contributors
     And Alice owns a project named "project1"
     When I go to Alice's page
     Then I should see "project1"
+    And I should see an owner ribbon
     And I should not see "We couldn't find any projects Alice has contributed to." 
     
   Scenario: A user views a contributor's page who is in a project team
@@ -60,6 +61,7 @@ Feature: Contributors
     And Alice is in the team of a project named "project1"
     When I go to Alice's page
     Then I should see "project1"
+    And I should see a team ribbon
     And I should not see "We couldn't find any projects Alice has contributed to."
   
   Scenario: A user views a contributor's page who has contributed to an invisible project

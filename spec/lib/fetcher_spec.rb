@@ -83,6 +83,7 @@ describe Fetcher::Repository do
       Fetcher::Repository.fetch_all('jeffkreeftmeijer')
       contributor = Contributor.find_by_login('jeffkreeftmeijer')
       contributor.contributions.length.should == 3
+      contributor.contributions.first['owner'].should == true
     end
 
     it 'should make forks invisible' do
@@ -118,7 +119,9 @@ describe Fetcher::Collaborator do
 
     it 'should link projects to collaborators' do
       Fetcher::Collaborator.fetch_all('jeffkreeftmeijer', 'srcfolio')
-      Contributor.find_by_login('jeffkreeftmeijer').contributions.length.should == 1
+      contributor = Contributor.find_by_login('jeffkreeftmeijer')
+      contributor.contributions.length.should == 1
+      contributor.contributions.first['member'].should == true
     end
 
     it 'should create contributors if they do not exist yet' do

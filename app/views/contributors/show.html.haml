@@ -2,10 +2,7 @@
 
 %img{:src => "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(@contributor.email || '')}.jpg", :alt => @contributor.best_name}
 
-/=render :partial => 'contribution', :collection => @ownerships, :locals => {:type => 'ownership'}
-/=render :partial => 'contribution', :collection => @memberships, :locals => {:type => 'memberships'}
 =render :partial => 'contribution', :collection => @contributions, :locals => {:type => 'contribution'}
 
-/-if @ownerships.empty? && @memberships.empty? &&
 -if @contributions.empty?
   %h2= "We couldn't find any projects #{@contributor.name} has contributed to."

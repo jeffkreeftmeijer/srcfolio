@@ -121,3 +121,6 @@ Then /^I should see ([^\"]*)'s gravatar$/ do |name|
   response.body.should include("http://www.gravatar.com/avatar/012a6a06cd312fbc0be8b3f28c4ef880.jpg")
 end
 
+Then /^I should see an? (team|owner) ribbon$/ do |type|
+  response.body.should include "src=\"/images/ribbon_#{type}.png"
+end
