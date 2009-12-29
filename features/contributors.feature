@@ -25,6 +25,7 @@ Feature: Contributors
 
   Scenario: A user views a contributor's page that has no contributions
     Given a contributor exists with a login of "al1ce" and a name of "Alice"
+    And Alice has no contributions
     When I go to Alice's page
     Then I should see "We couldn't find any projects Alice has contributed to."
 
@@ -38,6 +39,15 @@ Feature: Contributors
     And I should see "January 2009"
     And I should see "December 2009"
     And I should not see "Owned by"
+    
+  Scenario: A user views a contributor's page who has contributed to a project in December 2009
+    Given a contributor exists with a login of "al1ce" and a name of "Alice"
+    And Alice has contributed to a project named "project1" in "December 2009"
+    When I go to Alice's page
+    Then I should see "in"
+    And I should see "December 2009" once
+    And I should not see "from"
+    And I should not see "to"
 
   Scenario: A user views a contributor's page who has contributed to a project owned by somebody else
     Given a contributor exists with a login of "al1ce" and a name of "Alice"

@@ -14,6 +14,13 @@ Given /^there are no contributors$/ do
   Contributor.delete_all
 end
 
+Given /^([^\"]*) has no contributions$/ do |name|
+  contributor = Contributor.find_by_name(name)
+  contributor.contributions = []
+  contributor.save
+end
+
+
 Given /^([^\"]*) has contributed to a project named "([^\"]*)"$/ do |name, project|
   contributor = Contributor.find_by_name(name)
   contributor.contributions << {
@@ -24,6 +31,19 @@ Given /^([^\"]*) has contributed to a project named "([^\"]*)"$/ do |name, proje
   }
   contributor.save
 end
+
+Given /^([^\"]*) has contributed to a project named "([^\"]*)" in "([^\"]*)"$/ do |name, project, month|
+  contributor = Contributor.find_by_name(name)
+  contributor.contributions = []
+  contributor.contributions << {
+    :project => Project.make(:name => project, :owner => Contributor.make).id,
+    :started_at => "1 #{month}",
+    :stopped_at => "1 #{month}",
+    :commits => 12
+  }
+  contributor.save
+end
+
 
 Given /^([^\"]*) has contributed to a project named "([^\"]*)" which is owned by ([^\"]*)$/ do |name, project, owner|
   contributor = Contributor.find_by_name(name)
