@@ -90,7 +90,6 @@ module Fetcher
             }
           end
           contributor.save
-          Fetcher::User.send_later(:fetch, contributor.login)
         end
       end
     end
