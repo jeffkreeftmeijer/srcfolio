@@ -44,6 +44,9 @@ describe ContributorsController do
     response.status.should == '404 Not Found'
     response.should_not be_success
     response.should render_template('contributors/not_found')
+    job = Delayed::Job.first(:order => 'created_at desc') # workaround to get the last job...
+    job.should_not be_nil
+    job.handler.should include('Fetcher::User', ':fetch', 'z0e')
   end
 
   it 'should show a contributor page with contributions' do

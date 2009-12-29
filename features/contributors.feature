@@ -8,11 +8,13 @@ Feature: Contributors
 		And a contributor exists with a login of "b0b" and a name of "Bob"
 		And a contributor exists with a login of "ch4rlie"
 		And a contributor exists with a name of "Dave"
+		And a contributor exists with a login of "3ric" and a name of "Eric", who is invisible
 		When I go to the contributor list
 		Then I should see "Alice"
 		And I should see "Bob"
 		And I should see "ch4rlie"
 		And I should not see "/contributors/"
+		And I should not see "Eric"
 		When I follow "Alice"
 		Then I should be on Alice's page
 
@@ -111,6 +113,12 @@ Feature: Contributors
   
   Scenario: A user tries to view a contributor page that doesn't exist
     Given there are no contributors
-    When I go to the contributor page with a login of "z0e"
+    When I go to the contributor page with a login of "x4nder"
+    Then I should see "We've never heard of “x4nder” before."
+    And I should see "We're going to ask Github if it knows this user. Please check back in a bit."
+    
+  Scenario: A user tries to view a contributor page that is invisible
+		Given a contributor exists with a login of "z0e" and a name of "Zoe", who is invisible
+    When I go to Zoe's page
     Then I should see "We've never heard of “z0e” before."
     And I should see "We're going to ask Github if it knows this user. Please check back in a bit."

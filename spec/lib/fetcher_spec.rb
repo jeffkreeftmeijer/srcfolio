@@ -29,15 +29,24 @@ describe Fetcher::User do
       contributor.email.should ==     'jeff@kreeftmeijer.nl'
     end
 
-    it 'should update an existing user' do
+    it 'should update an existing user and make it visible' do
       Contributor.delete_all
-      Contributor.make(:login => 'jeffkreeftmeijer')
+      Contributor.make(:login => 'jeffkreeftmeijer', :visible => false)
       Fetcher::User.fetch('jeffkreeftmeijer')
       contributors = Contributor.find_all_by_login('jeffkreeftmeijer')
       contributors.length.should == 1
       contributors.first.name.should == 'Jeff Kreeftmeijer'
+      contributors.first.visible.should == true
     end
-
+    
+    it 'should create a new job to fetch projects' do
+      Delayed::Job.delete_all
+      Fetcher::User.fetch('jeffkreeftmeijer')
+      job = Delayed::Job.first(:order => 'created_at desc') # workaround to get the last job...
+      job.should_not be_nil
+      job.handler.should include('Fetcher::Repository', ':fetch_all', 'jeffkreeftmeijer')
+    end
+        
     it 'should raise an error when the specified user could not be found' do
       begin
       Fetcher::User.fetch('idontexist').should raise_error(NotFound, 'No Github user was found named "idontexist"')
@@ -105,6 +114,15 @@ describe Fetcher::Repository do
      project = Project.find_by_namespace_and_name('jeffkreeftmeijer', 'gemcutter')
      project.visible?.should == false
     end
+    
+    it 'should create new jobs to fetch the project teams and network data' do
+      Delayed::Job.delete_all
+      Fetcher::Repository.fetch_all('jeffkreeftmeijer')
+      jobs = Delayed::Job.all
+      jobs.length.should == 6
+      jobs[0].handler.should include('Fetcher::Collaborator', ':fetch_all', 'jeffkreeftmeijer', 'srcfolio')
+      jobs[1].handler.should include('Fetcher::Network', ':fetch_all', 'jeffkreeftmeijer', 'srcfolio')
+    end
   end
 end
 
@@ -153,9 +171,11 @@ describe Fetcher::Collaborator do
       contributor.contributions.length.should == 1
     end
 
-    it 'should create contributors if they do not exist yet' do
+    it 'should create invisible contributors if they do not exist yet' do
       Fetcher::Collaborator.fetch_all('jeffkreeftmeijer', 'srcfolio')
-      Contributor.find_by_login('bob').should_not be_nil
+      contributor = Contributor.find_by_login('bob')
+      contributor.should_not be_nil
+      contributor.visible.should == false
     end
   end
 end
@@ -207,7 +227,7 @@ describe Fetcher::Network do
       contributor.contributions.first['started_at'].should == '2009-12-13 08:03:03'.to_time
       contributor.contributions.first['stopped_at'].should == '2009-12-21 02:12:06'.to_time
     end
-    
+
     it 'should only link the projects once' do
       Project.delete_all
       contributor = Contributor.find_by_login('jeffkreeftmeijer')
@@ -226,14 +246,16 @@ describe Fetcher::Network do
 
     it 'should create contributors if they do not exist yet' do
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
-      Contributor.find_by_login('bob').should_not be_nil
+      contributor = Contributor.find_by_login('bob')
+      contributor.should_not be_nil
+      contributor.visible.should == false
     end
 
     it 'should only index contributors that have committed to space 1' do
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
       Contributor.find_by_login('charlie').should be_nil
     end
-        
+
     it 'should set the commit count for the project and merge contributors without a login but matching names' do
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
       Project.find_by_namespace_and_name('jeffkreeftmeijer', 'srcfolio').commits.should == 23

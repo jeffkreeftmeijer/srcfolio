@@ -9,6 +9,7 @@ class Contributor
   key :website,       String
   key :email,         String
   key :contributions, Array
+  key :visible,       Boolean, :default => true
   timestamps!
 
   def best_name

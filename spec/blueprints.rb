@@ -12,5 +12,4 @@ Project.blueprint do
   description 'A really cool project'
   owner       Contributor.make
   commits     100
-  visible     true
 end

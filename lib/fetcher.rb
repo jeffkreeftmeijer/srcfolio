@@ -21,8 +21,11 @@ module Fetcher
           :company =>   response['user']['company'],
           :location =>  response['user']['location'],
           :website =>   response['user']['blog'],
-          :email =>     response['user']['email']
+          :email =>     response['user']['email'],
+          :visible =>   true
         )
+
+        Fetcher::Repository.send_later(:fetch_all, github_username)
       end
     end
   end
@@ -37,7 +40,7 @@ module Fetcher
         response = get("/#{github_username}")
         contributor = Contributor.find_by_login(github_username)
         response['repositories'].each do |repository|
-         
+
           project = Project.find_or_create_by_namespace_and_name(
             repository['owner'],
             repository['name']
@@ -58,6 +61,9 @@ module Fetcher
               'owner' =>   true
             }
           end
+
+          Fetcher::Collaborator.send_later(:fetch_all, github_username, repository['name'])
+          Fetcher::Network.send_later(:fetch_all, github_username, repository['name'])
         end
         contributor.save
       end
@@ -74,7 +80,9 @@ module Fetcher
         collaborators = get("/#{project_namespace}/#{project_name}/collaborators")
         project = Project.find_by_namespace_and_name(project_namespace, project_name)
         collaborators['collaborators'].each do |collaborator|
-          contributor = Contributor.find_or_create_by_login(collaborator)
+          unless contributor = Contributor.find_by_login(collaborator)
+            contributor = Contributor.create(:login => collaborator, :visible => false)
+          end
           unless contributor.contributions.map{|c| c['project']}.include? project.id
             contributor.contributions << {
               'project' =>  project.id,
@@ -101,7 +109,7 @@ module Fetcher
         project.save
 
         contributions = {}
-                
+
         network_data['commits'].each do |commit|
           if commit['space'] == 1
             if commit['login'].empty?
@@ -127,11 +135,13 @@ module Fetcher
         end
 
         contributions.values.each do |contribution|
-          contributor = Contributor.find_or_create_by_login(contribution[:login])
+          unless contributor = Contributor.find_by_login(contribution[:login])
+            contributor = Contributor.create(:login => contribution[:login], :visible => false)
+          end                                      
           
           existing_contribution = contributor.contributions.select{|c| c['project'] == project.id}.first
           contributor.contributions.delete(existing_contribution)
-          
+
           contributor.contributions << (existing_contribution || {}).merge({
             'project' =>    project.id,
             'commits' =>    contribution[:commits],

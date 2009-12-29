@@ -10,6 +10,10 @@ Given /^a contributor exists with a login of "([^\"]*)" and a name of "([^\"]*)"
   Contributor.make(:login => login, :name => name) unless Contributor.find_by_login(login)
 end
 
+Given /^a contributor exists with a login of "([^\"]*)" and a name of "([^\"]*)", who is invisible$/ do |login, name|
+  Contributor.make(:login => login, :name => name, :visible => false) unless Contributor.find_by_login(login)
+end
+
 Given /^there are no contributors$/ do
   Contributor.delete_all
 end
