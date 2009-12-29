@@ -177,6 +177,14 @@ describe Fetcher::Collaborator do
       contributor.should_not be_nil
       contributor.visible.should == false
     end
+    
+    it 'should create jobs to fetch the invisible contributors' do
+      Delayed::Job.delete_all
+      Fetcher::Collaborator.fetch_all('jeffkreeftmeijer', 'srcfolio')
+      jobs = Delayed::Job.all
+      jobs.length.should == 2
+      jobs.first.handler.should include('Fetcher::User', ':fetch', 'jeffkreeftmeijer')
+    end
   end
 end
 

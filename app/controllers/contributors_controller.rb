@@ -1,6 +1,6 @@
 class ContributorsController < ApplicationController
   def index
-    @contributors = Contributor.all(:login => {'$ne' => ''}, :visible => true)
+    @contributors = Contributor.all(:login => {'$ne' => ''}, :visible => true).sort_by{|c| c.best_name.downcase }
   end
 
   def show
