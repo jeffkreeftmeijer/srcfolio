@@ -8,6 +8,6 @@ class ContributorsController < ApplicationController
       return render :not_found, :status => 404
     end
 
-    @contributions = @contributor.contributions.map{|c| c.merge({'project' => Project.find(c['project'])})}.select{|c| c['project'].visible? }
+    @contributions = @contributor.visible_contributions_with_projects
   end
 end
