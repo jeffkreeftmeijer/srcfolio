@@ -142,5 +142,5 @@ Then /^I should see ([^\"]*)'s gravatar$/ do |name|
 end
 
 Then /^I should see an? (team|owner) ribbon$/ do |type|
-  response.body.should include "src=\"/images/ribbon_#{type}.png"
+  response.body.should include "src=\"/images/ribbon_#{type}.gif"
 end

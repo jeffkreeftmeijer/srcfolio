@@ -14,4 +14,8 @@ class Contributor
   def best_name
     name || login
   end
+  
+  def  gravatar_url
+    "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(email || '')}.jpg"
+  end
 end

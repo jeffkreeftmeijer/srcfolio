@@ -1,8 +1,8 @@
 .project
 
   %h2= contribution['project'].name
-  =image_tag('ribbon_team.png', :class => 'ribbon') if contribution['member']
-  =image_tag('ribbon_owner.png', :class => 'ribbon') if contribution['owner']
+  =image_tag('ribbon_team.gif', :class => 'ribbon') if contribution['member']
+  =image_tag('ribbon_owner.gif', :class => 'ribbon') if contribution['owner']
 
   -if contribution['project'].owner.login != @contributor.login
     Owned by
