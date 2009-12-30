@@ -10,6 +10,6 @@
 
 %ul
   -@jobs.each do |job|
-    %li= debug(job.handler)
+    %li= debug job.handler
 
-= link_to('Jobs >>', admin_jobs_path)
+= link_to('Contributors >>', admin_contributors_path)
