@@ -1,7 +1,22 @@
-%h2 Invisible contributors
+%h2 Contributors
 
-= link_to('Jobs in queue >>', admin_jobs_path)
+= link_to('Jobs >>', admin_jobs_path)
+
+%p
+  Total:
+  %strong= Contributor.count
+  
+  Visible:
+  %strong= Contributor.count(:visible => true)
+  
+  Hidden:
+  %strong= Contributor.count(:visible => false)
+    
+
+%h3 Hidden Contributors
 
 %ul
   -@contributors.each do |contributor|
     %li= link_to(contributor.login, contributor_path(contributor.login), :target => 'blank')
+
+= link_to('Jobs >>', admin_jobs_path)

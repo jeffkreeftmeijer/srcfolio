@@ -3,6 +3,7 @@ ActionController::Routing::Routes.draw do |map|
   map.root      :controller => :contributors
   
   map.namespace :admin do |admin|
+    admin.root :controller => :jobs
     admin.resources :contributors, :only => :index
     admin.resources :jobs, :only => :index
   end
