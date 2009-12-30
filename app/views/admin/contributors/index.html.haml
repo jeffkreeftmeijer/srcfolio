@@ -1,0 +1,7 @@
+%h2 Invisible contributors
+
+= link_to('Jobs in queue >>', admin_jobs_path)
+
+%ul
+  -@contributors.each do |contributor|
+    %li= link_to(contributor.login, contributor_path(contributor.login), :target => 'blank')

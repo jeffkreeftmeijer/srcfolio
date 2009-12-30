@@ -1,0 +1,12 @@
+%h2 Jobs in queue
+
+= link_to('Invisible contributors >>', admin_contributors_path)
+
+%p
+  Total:
+  %strong= Delayed::Job.count
+
+%ul
+  -@jobs.each do |job|
+    %li= debug(job.handler)
+  
