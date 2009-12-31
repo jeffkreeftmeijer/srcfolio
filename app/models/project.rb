@@ -11,4 +11,8 @@ class Project
   key :commits,     Integer
   key :visible,     Boolean, :default => true
   timestamps!
+  
+  def best_name
+    fork? ? "#{namespace}-#{name}" : "#{name}"
+  end
 end

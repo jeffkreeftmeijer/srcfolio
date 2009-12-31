@@ -140,11 +140,22 @@ Given /^([^\"]*) is in the team of a project named "([^\"]*)", which is invisibl
   contributor.save
 end
 
+Given /^([^\"]*) owns a fork of "([^\"]*)"$/ do |name, project|
+  contributor = Contributor.find_by_name(name)
+  contributor.contributions = []
+  contributor.contributions << {
+    :project => Project.make(:name => project, :namespace => contributor.login, :fork => true, :owner => contributor).id,
+    :owner => true
+  }
+  contributor.save
+end
+
+
 Then /^I should see ([^\"]*)'s gravatar$/ do |name|
   contributor = Contributor.find_by_name(name)
   response.body.should include("http://www.gravatar.com/avatar/012a6a06cd312fbc0be8b3f28c4ef880.jpg")
 end
 
-Then /^I should see an? (team|owner) ribbon$/ do |type|
+Then /^I should see an? (team|owner|fork) ribbon$/ do |type|
   response.body.should include "src=\"/images/ribbon_#{type}.gif"
 end

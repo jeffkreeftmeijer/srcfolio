@@ -75,6 +75,14 @@ Feature: Contributors
     Then I should see "project1"
     And I should see a team ribbon
     And I should not see "We couldn't find any projects Alice has contributed to."
+    
+  Scenario: A user views a contributor's page who has a fork of another project
+    Given a contributor exists with a login of "al1ce" and a name of "Alice"
+    And Alice owns a fork of "project1"
+    When I go to Alice's page
+    Then I should see "al1ce-project1"
+    And I should see a fork ribbon
+    And I should not see "We couldn't find any projects Alice has contributed to."
   
   Scenario: A user views a contributor's page who has contributed to an invisible project
     Given a contributor exists with a login of "al1ce" and a name of "Alice"
