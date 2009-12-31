@@ -80,7 +80,7 @@ Feature: Contributors
     Given a contributor exists with a login of "al1ce" and a name of "Alice"
     And Alice owns a fork of "project1"
     When I go to Alice's page
-    Then I should see "al1ce-project1"
+    Then I should see "project1"
     And I should see a fork ribbon
     And I should not see "We couldn't find any projects Alice has contributed to."
   

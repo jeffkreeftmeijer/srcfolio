@@ -10,8 +10,4 @@ class Project
   key :fork,        Boolean
   key :commits,     Integer
   timestamps!
-  
-  def best_name
-    fork? ? "#{namespace}-#{name}" : "#{name}"
-  end
 end
