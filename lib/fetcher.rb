@@ -146,7 +146,8 @@ module Fetcher
             'project' =>    project.id,
             'commits' =>    contribution[:commits],
             'started_at' => contribution[:started_at],
-            'stopped_at' => contribution[:stopped_at]
+            'stopped_at' => contribution[:stopped_at],
+            'visible' =>    !project.fork?
           })
           contributor.save
         end

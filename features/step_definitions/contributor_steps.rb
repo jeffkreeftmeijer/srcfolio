@@ -31,7 +31,8 @@ Given /^([^\"]*) has contributed to a project named "([^\"]*)"$/ do |name, proje
     :project => Project.make(:name => project, :owner => contributor, :commits => 46).id,
     :started_at => 'January 1 2009',
     :stopped_at => 'December 1 2009',
-    :commits => 12
+    :commits => 12,
+    :visible => true
   }
   contributor.save
 end
@@ -43,7 +44,8 @@ Given /^([^\"]*) has contributed to a project named "([^\"]*)" in "([^\"]*)"$/ d
     :project => Project.make(:name => project, :owner => Contributor.make).id,
     :started_at => "1 #{month}",
     :stopped_at => "1 #{month}",
-    :commits => 12
+    :commits => 12,
+    :visible => true
   }
   contributor.save
 end
@@ -55,7 +57,8 @@ Given /^([^\"]*) has contributed to a project named "([^\"]*)" which is owned by
     :project => Project.make(:name => project, :owner => Contributor.make(:name => owner)).id,
     :started_at => 'January 1 2009',
     :stopped_at => 'December 1 2009',
-    :commits => 12
+    :commits => 12,
+    :visible => true
   }
   contributor.save
 end
@@ -65,7 +68,8 @@ Given /^([^\"]*) owns a project named "([^\"]*)"$/ do |name, project|
   contributor.contributions = []
   contributor.contributions << {
     :project => Project.make(:name => project, :owner => contributor).id,
-    :owner => true
+    :owner => true,
+    :visible => true
   }
   contributor.save
 end
@@ -75,7 +79,8 @@ Given /^([^\"]*) is in the team of a project named "([^\"]*)"$/ do |name, projec
   contributor.contributions = []
   contributor.contributions << {
     :project => Project.make(:name => project).id,
-    :member => true
+    :member => true,
+    :visible => true
   }
   contributor.save
 end
@@ -89,7 +94,8 @@ Given /^([^\"]*) owns a project named "([^\"]*)" and has contributed to that pro
     :started_at => 'January 1 2009',
     :stopped_at => 'December 1 2009',
     :commits => 12,
-    :owner => true
+    :owner => true,
+    :visible => true
   }
   contributor.save
 end
@@ -103,7 +109,8 @@ Given /^([^\"]*) is in the team of a project named "([^\"]*)" and has contribute
     :started_at => 'January 1 2009',
     :stopped_at => 'December 1 2009',
     :commits => 12,
-    :member => true
+    :member => true,
+    :visible => true
   }
   contributor.save
 end
@@ -112,10 +119,11 @@ Given /^([^\"]*) has contributed to a project named "([^\"]*)", which is invisib
   contributor = Contributor.find_by_name(name)
   contributor.contributions = []
   contributor.contributions << {
-    :project => Project.make(:name => project, :visible => false).id,
+    :project => Project.make(:name => project).id,
     :started_at => 'January 1 2009',
     :stopped_at => 'December 1 2009',
-    :commits => 12
+    :commits => 12,
+    :visible => false
   }
   contributor.save
 end
@@ -124,8 +132,9 @@ Given /^([^\"]*) owns a project named "([^\"]*)", which is invisible$/ do |name,
   contributor = Contributor.find_by_name(name)
   contributor.contributions = []
   contributor.contributions << {
-    :project => Project.make(:name => project, :owner => contributor, :visible => false).id,
-    :owner => true
+    :project => Project.make(:name => project, :owner => contributor).id,
+    :owner => true,
+    :visible => false
   }
   contributor.save
 end
@@ -135,7 +144,8 @@ Given /^([^\"]*) is in the team of a project named "([^\"]*)", which is invisibl
   contributor.contributions = []
   contributor.contributions << {
     :project => Project.make(:name => project, :visible => false).id,
-    :member => true
+    :member => true,
+    :visible => false
   }
   contributor.save
 end
@@ -145,7 +155,8 @@ Given /^([^\"]*) owns a fork of "([^\"]*)"$/ do |name, project|
   contributor.contributions = []
   contributor.contributions << {
     :project => Project.make(:name => project, :namespace => contributor.login, :fork => true, :owner => contributor).id,
-    :owner => true
+    :owner => true,
+    :visible => true
   }
   contributor.save
 end

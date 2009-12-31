@@ -38,7 +38,7 @@ describe Fetcher::User do
       contributors.first.name.should == 'Jeff Kreeftmeijer'
       contributors.first.visible.should == true
     end
-    
+
     it 'should create a new job to fetch projects' do
       Delayed::Job.delete_all
       Fetcher::User.fetch('jeffkreeftmeijer')
@@ -46,7 +46,7 @@ describe Fetcher::User do
       job.should_not be_nil
       job.handler.should include('Fetcher::Repository', ':fetch_all', 'jeffkreeftmeijer')
     end
-        
+
     it 'should raise an error when the specified user could not be found' do
       begin
       Fetcher::User.fetch('idontexist').should raise_error(NotFound, 'No Github user was found named "idontexist"')
@@ -83,7 +83,6 @@ describe Fetcher::Repository do
       projects.first.description.should ==  'src{folio}'
       projects.first.homepage.should ==     'http://srcfolio.com'
       projects.first.fork.should ==         false
-      projects.first.visible.should ==      true
       projects.first.namespace.should ==    'jeffkreeftmeijer'
       projects.first.owner.should be_instance_of(Contributor)
     end
@@ -107,12 +106,6 @@ describe Fetcher::Repository do
       Fetcher::Repository.fetch_all('jeffkreeftmeijer')
       contributor = Contributor.find_by_login('jeffkreeftmeijer')
       contributor.contributions.length.should == 3
-    end
-
-    it 'should make forks invisible' do
-     Fetcher::Repository.fetch_all('jeffkreeftmeijer')
-     project = Project.find_by_namespace_and_name('jeffkreeftmeijer', 'gemcutter')
-     project.visible?.should == false
     end
     
     it 'should create new jobs to fetch the project teams and network data' do
@@ -193,6 +186,12 @@ describe Fetcher::Network do
     network_data_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../stubs/network_data.json')).read
     @network_data = HTTParty::Response.new(JSON(network_data_stub_file), network_data_stub_file, 200, 'OK')
 
+    network_meta_fork_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../stubs/network_meta_fork.json')).read
+    @network_meta_fork = HTTParty::Response.new(JSON(network_meta_fork_stub_file), network_meta_fork_stub_file, 200, 'OK')
+
+    network_data_fork_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../stubs/network_data_fork.json')).read
+    @network_data_fork = HTTParty::Response.new(JSON(network_data_fork_stub_file), network_data_fork_stub_file, 200, 'OK')
+
     Fetcher::Network.stub!(:get).
       with('/jeffkreeftmeijer/srcfolio/network_meta').
       and_return(@network_meta)
@@ -259,6 +258,15 @@ describe Fetcher::Network do
     it 'should set the commit count for the project and merge contributors without a login but matching names' do
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
       Project.find_by_namespace_and_name('jeffkreeftmeijer', 'srcfolio').commits.should == 23
+    end
+    
+    it 'should make forks invisible by default' do
+      project = Project.find_by_namespace_and_name('jeffkreeftmeijer', 'srcfolio')
+      project.fork = true
+      project.save
+      Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
+      contributor = Contributor.find_by_login('jeffkreeftmeijer')
+      contributor.contributions.first['visible'].should == false
     end
   end
 end

@@ -9,7 +9,6 @@ class Project
   key :homepage,    String
   key :fork,        Boolean
   key :commits,     Integer
-  key :visible,     Boolean, :default => true
   timestamps!
   
   def best_name

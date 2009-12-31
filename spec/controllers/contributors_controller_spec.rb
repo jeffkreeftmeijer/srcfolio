@@ -17,7 +17,8 @@ describe ContributorsController do
       :name => 'Dave',
       :contributions => [
         {
-          :project => project.id
+          :project => project.id,
+          :visible => true
         }
       ]
     )

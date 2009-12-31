@@ -21,14 +21,14 @@ class Contributor
   end
 
   def visible_contributions_with_projects
-    contributions_with_projects = contributions.map do |c|
+    visible_contributions = contributions.select do |c|
+      c['visible']
+    end
+    
+    visible_contributions_with_projects = visible_contributions.map do |c|
       c.merge({
         'project' => Project.find(c['project'])
       })
-    end
-    
-    visible_contributions_with_projects = contributions_with_projects.select do |c|
-      c['project'].visible?
     end
     
     visible_contributions_with_projects.sort_by do |c|
