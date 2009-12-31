@@ -10,6 +10,7 @@ gem "mongo_mapper",                 "0.6.7"
 gem "haml",                         "2.2.16"
 gem "httparty",                     "0.5.0"
 gem "jeffkreeftmeijer-delayed_job", "1.7.0", :require_as => 'delayed_job'
+gem "subdomain-fu",                 "0.5.3"
 
 only :test, :cucumber do
   gem "rspec-rails",            "1.2.9"

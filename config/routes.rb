@@ -1,4 +1,6 @@
 ActionController::Routing::Routes.draw do |map|
+  map.contributor_with_subdomain '', :controller => 'contributors', :action => 'show', :conditions => { :subdomain => /.+/ }
+  
   map.resources :contributors, :only => [:index, :show]
   map.root      :controller => :contributors
   
