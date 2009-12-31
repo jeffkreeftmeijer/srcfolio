@@ -1,8 +1,13 @@
 !!! Strict
 %html{:xmlns => 'http://www.w3.org/1999/xhtml', 'xml:lang' => 'en', :lang => 'en'}
   %head
+    -if @contributor
+      %link{:rel => 'icon', :type => 'image/jpg', :href => @contributor.gravatar_url(16)}
+      %link{:rel => 'apple-touch-icon', :href => @contributor.gravatar_url(60)}
     =stylesheet_link_tag 'reset', 'application'
-    %title src{folio}
+    %title
+      =@contributor ? "#{@contributor.best_name} on " : ''
+      src{folio}
   %body
     #container
       =yield

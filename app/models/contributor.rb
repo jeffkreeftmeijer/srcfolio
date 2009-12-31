@@ -16,8 +16,8 @@ class Contributor
     (name.nil? || name.empty?) ? login : name
   end
 
-  def  gravatar_url
-    "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(email || '')}.jpg"
+  def  gravatar_url(size = nil)
+    "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(email || '')}.jpg?s=#{size||80}"
   end
 
   def visible_contributions_with_projects
