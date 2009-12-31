@@ -51,14 +51,14 @@ module Fetcher
             :description => repository['description'],
             :homepage =>    repository['homepage'],
             :fork =>        repository['fork'],
-            :visible =>     repository['fork']? false : true,
             :owner =>       Contributor.find_by_login(github_username)
           )
 
           unless contributor.contributions.map{|c| c['project']}.include? project.id
             contributor.contributions << {
               'project' =>  project.id,
-              'owner' =>   true
+              'owner' =>    true,
+              'visible' =>  !project.fork?
             }
           end
 
@@ -86,7 +86,8 @@ module Fetcher
           unless contributor.contributions.map{|c| c['project']}.include? project.id
             contributor.contributions << {
               'project' =>  project.id,
-              'member' =>   true
+              'member' =>   true,
+              'visible' =>  false
             }
           end
           contributor.save

@@ -55,7 +55,7 @@ describe ContributorsController do
     assigns[:contributions].count.should == 1
     assigns[:contributions].each do |c|
        c['project'].should be_instance_of Project
-       c['project'].visible?.should eql true
+       c['visible'].should eql true
      end
   end
 end

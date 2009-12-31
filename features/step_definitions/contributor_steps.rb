@@ -143,7 +143,7 @@ Given /^([^\"]*) is in the team of a project named "([^\"]*)", which is invisibl
   contributor = Contributor.find_by_name(name)
   contributor.contributions = []
   contributor.contributions << {
-    :project => Project.make(:name => project, :visible => false).id,
+    :project => Project.make(:name => project).id,
     :member => true,
     :visible => false
   }

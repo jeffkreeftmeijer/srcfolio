@@ -74,17 +74,19 @@ describe Fetcher::Repository do
     end
 
     it 'should create new projects' do
+      Project.delete_all
       Fetcher::Repository.fetch_all('jeffkreeftmeijer')
 
       projects = Project.all
       projects.count.should eql 3
-      projects.first.name.should ==         'srcfolio'
-      projects.first.github_url.should ==   'http://github.com/jeffkreeftmeijer/srcfolio'
-      projects.first.description.should ==  'src{folio}'
-      projects.first.homepage.should ==     'http://srcfolio.com'
-      projects.first.fork.should ==         false
-      projects.first.namespace.should ==    'jeffkreeftmeijer'
-      projects.first.owner.should be_instance_of(Contributor)
+      project = Project.first
+      project.name.should ==         'wakoopa'
+      project.github_url.should ==   'http://github.com/jeffkreeftmeijer/wakoopa'
+      project.description.should ==  'the Ruby Wakoopa API Wrapper'
+      project.homepage.should ==     'http://wakoopa.com'
+      project.fork.should ==         false
+      project.namespace.should ==    'jeffkreeftmeijer'
+      project.owner.should be_instance_of(Contributor)
     end
 
     it 'should add the projects to the owners ownerships' do
@@ -170,6 +172,12 @@ describe Fetcher::Collaborator do
       contributor.should_not be_nil
       contributor.visible.should == false
     end
+    
+    it 'should make team memberships invisible by default' do
+      Fetcher::Collaborator.fetch_all('jeffkreeftmeijer', 'srcfolio')
+      contributor = Contributor.find_by_login('bob')
+      contributor.contributions.first['visible'].should == false
+    end
   end
 end
 
@@ -185,13 +193,7 @@ describe Fetcher::Network do
 
     network_data_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../stubs/network_data.json')).read
     @network_data = HTTParty::Response.new(JSON(network_data_stub_file), network_data_stub_file, 200, 'OK')
-
-    network_meta_fork_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../stubs/network_meta_fork.json')).read
-    @network_meta_fork = HTTParty::Response.new(JSON(network_meta_fork_stub_file), network_meta_fork_stub_file, 200, 'OK')
-
-    network_data_fork_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../stubs/network_data_fork.json')).read
-    @network_data_fork = HTTParty::Response.new(JSON(network_data_fork_stub_file), network_data_fork_stub_file, 200, 'OK')
-
+    
     Fetcher::Network.stub!(:get).
       with('/jeffkreeftmeijer/srcfolio/network_meta').
       and_return(@network_meta)
