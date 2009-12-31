@@ -53,14 +53,15 @@ module Fetcher
             :fork =>        repository['fork'],
             :owner =>       Contributor.find_by_login(github_username)
           )
+          
+          existing_contribution = contributor.contributions.select{|c| c['project'] == project.id}.first
+          contributor.contributions.delete(existing_contribution)
 
-          unless contributor.contributions.map{|c| c['project']}.include? project.id
-            contributor.contributions << {
-              'project' =>  project.id,
-              'owner' =>    true,
-              'visible' =>  !project.fork?
-            }
-          end
+          contributor.contributions << (existing_contribution || {}).merge({
+            'project' =>  project.id,
+            'owner' =>    true,
+            'visible' =>  !project.fork?
+          })
 
           Fetcher::Collaborator.send_later(:fetch_all, github_username, repository['name'])
           Fetcher::Network.send_later(:fetch_all, github_username, repository['name'])
@@ -83,13 +84,16 @@ module Fetcher
           unless contributor = Contributor.find_by_login(collaborator)
             contributor = Contributor.create(:login => collaborator, :visible => false)
           end
-          unless contributor.contributions.map{|c| c['project']}.include? project.id
-            contributor.contributions << {
-              'project' =>  project.id,
-              'member' =>   true,
-              'visible' =>  false
-            }
-          end
+          
+          existing_contribution = contributor.contributions.select{|c| c['project'] == project.id}.first
+          contributor.contributions.delete(existing_contribution)
+
+          contributor.contributions << (existing_contribution || {}).merge({
+            'project' =>  project.id,
+            'member' =>   true,
+            'visible' =>  existing_contribution ? existing_contribution['visible'] || false : false
+          })
+        
           contributor.save
         end
       end

@@ -80,10 +80,10 @@ describe Fetcher::Repository do
       projects = Project.all
       projects.count.should eql 3
       project = Project.first
-      project.name.should ==         'wakoopa'
-      project.github_url.should ==   'http://github.com/jeffkreeftmeijer/wakoopa'
-      project.description.should ==  'the Ruby Wakoopa API Wrapper'
-      project.homepage.should ==     'http://wakoopa.com'
+      project.name.should ==         'srcfolio'
+      project.github_url.should ==   'http://github.com/jeffkreeftmeijer/srcfolio'
+      project.description.should ==  'src{folio}'
+      project.homepage.should ==     'http://srcfolio.com'
       project.fork.should ==         false
       project.namespace.should ==    'jeffkreeftmeijer'
       project.owner.should be_instance_of(Contributor)
