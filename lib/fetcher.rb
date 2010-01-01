@@ -45,7 +45,9 @@ module Fetcher
             repository['owner'],
             repository['name']
           )
-
+          
+          project.links << Link.new('name' => 'Source Code', 'url' => repository['url'])
+          
           project.update_attributes!(
             :github_url =>  repository['url'],
             :description => repository['description'],

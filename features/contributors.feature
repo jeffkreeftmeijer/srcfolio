@@ -42,6 +42,12 @@ Feature: Contributors
     And I should see "December 2009"
     And I should not see "Owned by"
     
+  Scenario: A user views a contributor's page who has contributed to a project which has a link
+    Given a contributor exists with a login of "al1ce" and a name of "Alice"
+    And Alice has contributed to a project named "project1" which has a source code link
+    When I go to Alice's page
+    Then I should see "Source Code" which links to "http://github.com/some/repo"
+    
   Scenario: A user views a contributor's page who has contributed to a project in December 2009
     Given a contributor exists with a login of "al1ce" and a name of "Alice"
     And Alice has contributed to a project named "project1" in "December 2009"

@@ -46,7 +46,7 @@ describe Fetcher::User do
       job.should_not be_nil
       job.handler.should include('Fetcher::Repository', ':fetch_all', 'jeffkreeftmeijer')
     end
-
+    
     it 'should raise an error when the specified user could not be found' do
       begin
       Fetcher::User.fetch('idontexist').should raise_error(NotFound, 'No Github user was found named "idontexist"')
@@ -108,6 +108,16 @@ describe Fetcher::Repository do
       Fetcher::Repository.fetch_all('jeffkreeftmeijer')
       contributor = Contributor.find_by_login('jeffkreeftmeijer')
       contributor.contributions.length.should == 3
+    end
+    
+    it 'should create a links to the projects github repos' do
+      Fetcher::Repository.fetch_all('jeffkreeftmeijer')
+      project = Project.first
+      link = project.links.first
+      project.links.should_not be_empty
+      link.should be_instance_of Link
+      link.name.should == 'Source Code'
+      link.url.should ==  'http://github.com/jeffkreeftmeijer/srcfolio'
     end
     
     it 'should create new jobs to fetch the project teams and network data' do

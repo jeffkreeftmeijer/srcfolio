@@ -24,7 +24,6 @@ Given /^([^\"]*) has no contributions$/ do |name|
   contributor.save
 end
 
-
 Given /^([^\"]*) has contributed to a project named "([^\"]*)"$/ do |name, project|
   contributor = Contributor.find_by_name(name)
   contributor.contributions << {
@@ -62,6 +61,19 @@ Given /^([^\"]*) has contributed to a project named "([^\"]*)" which is owned by
   }
   contributor.save
 end
+
+Given /^^([^\"]*) has contributed to a project named "([^\"]*)" which has a source code link$/ do |name, project|
+  contributor = Contributor.find_by_name(name)
+  contributor.contributions << {
+    :project => Project.make(:name => project, :owner => Contributor.make(:name => contributor), :links => [Link.new(:name => 'Source Code', :url => 'http://github.com/some/repo')]).id,
+    :started_at => 'January 1 2009',
+    :stopped_at => 'December 1 2009',
+    :commits => 12,
+    :visible => true
+  }
+  contributor.save
+end
+
 
 Given /^([^\"]*) owns a project named "([^\"]*)"$/ do |name, project|
   contributor = Contributor.find_by_name(name)
@@ -161,7 +173,6 @@ Given /^([^\"]*) owns a fork of "([^\"]*)"$/ do |name, project|
   contributor.save
 end
 
-
 Then /^I should see ([^\"]*)'s gravatar$/ do |name|
   contributor = Contributor.find_by_name(name)
   response.body.should include("http://www.gravatar.com/avatar/012a6a06cd312fbc0be8b3f28c4ef880.jpg")
@@ -170,3 +181,10 @@ end
 Then /^I should see an? (team|owner|fork) ribbon$/ do |type|
   response.body.should include "src=\"/images/ribbon_#{type}.gif"
 end
+
+Then /^I should see "([^\"]*)" which links to "([^\"]*)"$/ do |text, url|
+  response.should contain(text)
+  response.body.should include(url)
+end
+
+

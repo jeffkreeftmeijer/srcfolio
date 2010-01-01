@@ -32,3 +32,10 @@
         %li
           %strong to
           %span=contribution['stopped_at'].to_date.strftime("%B %Y")
+  
+  -unless contribution['project'].links.empty?
+    %ul.buttons
+      -contribution['project'].links.each do |link|
+        %li= link_to(link.name, link.url)
+        
+  %hr.clear

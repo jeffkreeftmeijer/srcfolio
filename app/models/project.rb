@@ -10,4 +10,6 @@ class Project
   key :fork,        Boolean
   key :commits,     Integer
   timestamps!
+  
+  many :links
 end
