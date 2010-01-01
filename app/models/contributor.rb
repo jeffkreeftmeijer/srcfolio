@@ -26,13 +26,11 @@ class Contributor
     end
     
     visible_contributions_with_projects = visible_contributions.map do |c|
-      c.merge({
-        'project' => Project.find(c['project'])
-      })
+      c.merge({'project' => Project.find(c['project'])})
     end
     
     visible_contributions_with_projects.sort_by do |c|
-      c['stopped_at'] ? c['stopped_at'].to_i : 0
-    end.reverse!
+      [c['order'] || 0, - (c['stopped_at'] ? c['stopped_at'].to_i : 0)]
+    end
   end
 end

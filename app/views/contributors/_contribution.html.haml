@@ -1,8 +1,7 @@
 .project
-  
   %h2
     =contribution['project'].name
-  
+
   -if contribution['owner']
     -if contribution['project'].fork?
       =image_tag('ribbon_fork.gif', :class => 'ribbon')

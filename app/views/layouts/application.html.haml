@@ -6,8 +6,7 @@
       %link{:rel => 'apple-touch-icon', :href => @contributor.gravatar_url(60)}
     =stylesheet_link_tag 'reset', 'application'
     %title
-      =@contributor ? "#{@contributor.best_name} on " : ''
-      src{folio}
+      ="#{@contributor ? @contributor.best_name + ' on' : ''} src{folio}"
   %body
     #container
       =yield

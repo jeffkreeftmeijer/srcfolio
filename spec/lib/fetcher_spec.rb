@@ -199,7 +199,14 @@ describe Fetcher::Network do
       and_return(@network_meta)
 
     Fetcher::Network.stub!(:get).
-      with('/jeffkreeftmeijer/srcfolio/network_data_chunk', :query => {:nethash => '0a54d8ce980e06006bd7fd00b4319c944622b5d8'}).
+      with(
+        '/jeffkreeftmeijer/srcfolio/network_data_chunk',
+        :query => {
+          :nethash => '0a54d8ce980e06006bd7fd00b4319c944622b5d8',
+          :start => 0,
+          :end => 22
+        }
+      ).
       and_return(@network_data)
   end
 
@@ -210,7 +217,14 @@ describe Fetcher::Network do
         and_return(@network_meta)
 
       Fetcher::Network.should_receive(:get).
-        with('/jeffkreeftmeijer/srcfolio/network_data_chunk', :query => {:nethash => '0a54d8ce980e06006bd7fd00b4319c944622b5d8'}).
+        with(
+          '/jeffkreeftmeijer/srcfolio/network_data_chunk',
+          :query => {
+            :nethash => '0a54d8ce980e06006bd7fd00b4319c944622b5d8',
+            :start => 0,
+            :end => 22
+          }
+        ).
         and_return(@network_data)
 
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')

@@ -108,7 +108,14 @@ module Fetcher
     class << self
       def fetch_all(project_namespace, project_name)
         network_meta = get("/#{project_namespace}/#{project_name}/network_meta")
-        network_data = get("/#{project_namespace}/#{project_name}/network_data_chunk", :query => {:nethash => network_meta['nethash']})
+        network_data = get(
+          "/#{project_namespace}/#{project_name}/network_data_chunk",
+          :query => {
+            :nethash => network_meta['nethash'],
+            :start => 0,
+            :end => network_meta['dates'].count - 1
+          }
+        )
         project = Project.find_by_namespace_and_name(project_namespace, project_name)
         project.commits = network_data['commits'].length
         project.save
