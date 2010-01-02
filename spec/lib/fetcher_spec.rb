@@ -110,14 +110,18 @@ describe Fetcher::Repository do
       contributor.contributions.length.should == 3
     end
     
-    it 'should create a links to the projects github repos' do
+    it 'should create links to the projects homepages and github repos' do
       Fetcher::Repository.fetch_all('jeffkreeftmeijer')
       project = Project.first
-      link = project.links.first
+      links = project.links
       project.links.should_not be_empty
-      link.should be_instance_of Link
-      link.name.should == 'Source Code'
-      link.url.should ==  'http://github.com/jeffkreeftmeijer/srcfolio'
+      links[0].should be_instance_of Link
+      links[0].name.should == 'Homepage'
+      links[0].url.should ==  'http://srcfolio.com'
+      links[1].should be_instance_of Link
+      links[1].name.should == 'Source Code'
+      links[1].url.should ==  'http://github.com/jeffkreeftmeijer/srcfolio'
+      
     end
     
     it 'should create new jobs to fetch the project teams and network data' do

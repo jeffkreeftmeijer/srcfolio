@@ -46,6 +46,7 @@ module Fetcher
             repository['name']
           )
           
+          project.links << Link.new('name' => 'Homepage', 'url' => repository['homepage']) unless repository['homepage'].empty?
           project.links << Link.new('name' => 'Source Code', 'url' => repository['url'])
           
           project.update_attributes!(
