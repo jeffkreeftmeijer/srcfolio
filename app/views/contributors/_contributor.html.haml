@@ -1,2 +1,2 @@
 %li
-  =link_to(contributor.best_name, contributor_path(contributor.login))
+  =link_to(image_tag(contributor.gravatar_url(75), :alt => contributor.best_name, :class => 'gravatar', :title => contributor.best_name), contributor_path(contributor.login))

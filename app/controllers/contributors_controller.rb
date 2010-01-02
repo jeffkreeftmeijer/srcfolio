@@ -1,6 +1,12 @@
 class ContributorsController < ApplicationController
   def index
-    @contributors = Contributor.all(:login => {'$ne' => ''}, :visible => true).sort_by{|c| c.best_name.downcase }
+    @contributors = Contributor.all(
+      :login =>   {'$ne' => ''},
+      :email =>   {'$ne' => ''},
+      :visible => true,
+      :limit =>   12,
+      :order =>   'updated_at desc'
+    )
   end
 
   def show

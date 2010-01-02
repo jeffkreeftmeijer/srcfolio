@@ -1,8 +1,6 @@
 =rounded-corners
   -webkit-border-radius: 10px
-  -webkit-box-shadow: #d9d9d9 0px 1px 0px
   -moz-border-radius: 10px
-  -moz-box-shadow: #d9d9d9 0px 1px 0px
  
 =dark-box
   background-color: #222
@@ -10,12 +8,13 @@
   text-shadow: #222 0px 1px 0px
   font-weight: 300
   +rounded-corners
+  -webkit-box-shadow: #fff 0px 1px 0px
+  -moz-box-shadow: #fff 0px 1px 0px
 
 body
   background-color: #d9d9d9
   background-image: url('/images/background.png')
   background-repeat: repeat-x
-  background-position: fixed
   text-shadow: #d9d9d9 0px 1px 0px
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
   font-size: 14px
@@ -26,7 +25,7 @@ h1
   font-size: 32px
 
 h2
-  font-size: 24px
+  font-size: 22px
 
 h1, h2
   font-family: "Museo", "Helvetica Neue", Helvetica, Arial, sans-serif
@@ -40,6 +39,9 @@ a
 strong
   font-weight: 900
 
+p
+  margin: 0px 0px 10px 0px
+
 hr.clear
   clear: both
   height: 0
@@ -51,18 +53,45 @@ div
     width: 500px
     margin: 0px auto
     padding: 25px 0px
-
+    
+    img.logo
+      margin-bottom: 25px
+    
+    img.gravatar
+      +rounded-corners
+      -webkit-box-shadow: #fff 0px 1px 0px
+      -moz-box-shadow: #fff 0px 1px 0px
+      
+    #left
+      float: left
+      width: 240px
+      margin: 25px 10px 25px 0px
+    
+    #right
+      float: right
+      width: 240px
+      margin: 25px 0px 25px 10px
+    
     #header
       h1
         float: left
-        width: 400px
+        /width: 400px
 
       img.gravatar
-        float: right
         +rounded-corners
+        -webkit-box-shadow: #d9d9d9 0px 1px 0px
+        -moz-box-shadow: #d9d9d9 0px 1px 0px
+        float: right
 
     h2#message
       margin: 25px 0px
+    
+    ul#contributors
+      margin: 0px -5px
+      
+      li
+        float: left
+        margin: 5px
 
   &.project
     position: relative
@@ -86,7 +115,7 @@ div
       
     ul
       &.buttons
-        margin-left: -10px
+        margin: 0px -10px 0px -10px
         width: 470px
 
         li

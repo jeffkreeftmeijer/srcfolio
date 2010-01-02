@@ -1,3 +1,23 @@
-%h1 Contributors
+=image_tag('logo.png', :class => 'logo')
+
+%h2 Open source portfolios
+
+%p= "Since #{link_to('Github', 'http://github.com')} is an easy way to find, start and contribute to projects, more and more people are referring to their accounts to show off their work. Great, but that doesn't really give a full overview."
+
+%p By automagically fetching users, projects and commit data from Github, we create nice looking one page portfolios for open source contributors. These portfolios show projects you started, but also adds the projects you contributed to.
+
+#left
+  %h2 Want one?
+  
+  We may have already indexed you. Just type your Github username in the box below and we'll check out if we've come across you yet.
+
+#right
+  %h2 Help out
+  
+  %p= "Srcfolio is an open source project by itself and we'd love you to help out making it better. If you want to get your hands dirty, head over to the #{link_to('Github page', 'http://github.com/jeffkreeftmeijer/srcfolio')} to get the source and more information on how to help."
+
+%hr.clear
+
+%h2 Recently updated
 
 %ul#contributors= render @contributors
