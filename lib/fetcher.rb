@@ -45,10 +45,15 @@ module Fetcher
             repository['owner'],
             repository['name']
           )
-          
-          project.links << Link.new('name' => 'Homepage', 'url' => repository['homepage']) unless repository['homepage'].empty?
-          project.links << Link.new('name' => 'Source Code', 'url' => repository['url'])
-          
+
+          if project.links.select{|l| l.name == 'Project Homepage'}.empty? && !repository['homepage'].empty?
+            project.links << Link.new('name' => 'Project Homepage', 'url' => repository['homepage'])
+          end
+
+          if project.links.select{|l| l.name == 'Source Code'}.empty?
+            project.links << Link.new('name' => 'Source Code', 'url' => repository['url'])
+          end
+
           project.update_attributes!(
             :github_url =>  repository['url'],
             :description => repository['description'],
@@ -56,7 +61,7 @@ module Fetcher
             :fork =>        repository['fork'],
             :owner =>       Contributor.find_by_login(github_username)
           )
-          
+
           existing_contribution = contributor.contributions.select{|c| c['project'] == project.id}.first
           contributor.contributions.delete(existing_contribution)
 
@@ -87,7 +92,7 @@ module Fetcher
           unless contributor = Contributor.find_by_login(collaborator)
             contributor = Contributor.create(:login => collaborator, :visible => false)
           end
-          
+
           existing_contribution = contributor.contributions.select{|c| c['project'] == project.id}.first
           contributor.contributions.delete(existing_contribution)
 
@@ -96,7 +101,7 @@ module Fetcher
             'member' =>   true,
             'visible' =>  existing_contribution ? existing_contribution['visible'] || false : false
           })
-        
+
           contributor.save
         end
       end
@@ -152,8 +157,8 @@ module Fetcher
         contributions.values.each do |contribution|
           unless contributor = Contributor.find_by_login(contribution[:login])
             contributor = Contributor.create(:login => contribution[:login], :visible => false)
-          end                                      
-          
+          end
+
           existing_contribution = contributor.contributions.select{|c| c['project'] == project.id}.first
           contributor.contributions.delete(existing_contribution)
 

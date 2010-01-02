@@ -116,12 +116,19 @@ describe Fetcher::Repository do
       links = project.links
       project.links.should_not be_empty
       links[0].should be_instance_of Link
-      links[0].name.should == 'Homepage'
+      links[0].name.should == 'Project Homepage'
       links[0].url.should ==  'http://srcfolio.com'
       links[1].should be_instance_of Link
       links[1].name.should == 'Source Code'
       links[1].url.should ==  'http://github.com/jeffkreeftmeijer/srcfolio'
-      
+    end
+    
+    it 'should create the links only once' do
+      Fetcher::Repository.fetch_all('jeffkreeftmeijer')
+      Fetcher::Repository.fetch_all('jeffkreeftmeijer')
+      project = Project.first
+      links = project.links
+      project.links.length.should eql 2
     end
     
     it 'should create new jobs to fetch the project teams and network data' do
