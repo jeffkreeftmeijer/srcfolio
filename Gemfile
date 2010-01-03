@@ -27,6 +27,7 @@ only :development do
   gem "metric_fu",  "1.1.6"
   gem "reek",       "1.2.6"
   gem "roodi",      "2.1.0"
+  gem "capistrano", "2.5.11"
 end
 
 disable_system_gems
