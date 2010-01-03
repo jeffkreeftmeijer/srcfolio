@@ -10,8 +10,9 @@ class ContributorsController < ApplicationController
   end
 
   def show
-    unless @contributor = Contributor.find_by_login(current_subdomain || params[:id], :visible => true)
-      Fetcher::User.send_later(:fetch, params[:id])
+    id = current_subdomain || params[:id]
+    unless @contributor = Contributor.find_by_login(id, :visible => true)
+      Fetcher::User.send_later(:fetch, id)
       return render :not_found, :status => 404
     end
 

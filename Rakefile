@@ -9,6 +9,8 @@ require 'rake/rdoctask'
 
 require 'tasks/rails'
 
+require 'metric_fu'
+
 task :environment
 task :merb_env
 

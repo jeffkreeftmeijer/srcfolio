@@ -5,25 +5,32 @@ module Fetcher
     format :json
 
     class << self
+      
       def fetch_all(project_namespace, project_name)
-        collaborators = get("/#{project_namespace}/#{project_name}/collaborators")
-        project = Project.find_by_namespace_and_name(project_namespace, project_name)
-        collaborators['collaborators'].each do |collaborator|
-          unless contributor = Contributor.find_by_login(collaborator)
-            contributor = Contributor.create(:login => collaborator, :visible => false)
-          end
+        add_projects_to_contributors(
+          Project.find_by_namespace_and_name(project_namespace, project_name).id,
+          get("/#{project_namespace}/#{project_name}/collaborators")['collaborators']
+        )
+      end
+      
+      def add_projects_to_contributors(project, collaborators)
+        collaborators.each do |collaborator|
+          contributor =   Contributor.find_or_create_invisible_by_login(collaborator)
+          contribution =  find_existing_contribution(project, contributor)
 
-          existing_contribution = contributor.contributions.select{|c| c['project'] == project.id}.first
-          contributor.contributions.delete(existing_contribution)
-
-          contributor.contributions << (existing_contribution || {}).merge({
-            'project' =>  project.id,
+          contributor.contributions << contribution.merge({
+            'project' =>  project,
             'member' =>   true,
-            'visible' =>  existing_contribution ? existing_contribution['visible'] || false : false
+            'visible' =>  contribution['visible'] || false
           })
 
           contributor.save
         end
+      end
+      
+      def find_existing_contribution(id, contributor)
+        contributor.contributions.delete(contributor.contributions.
+          select{|contribution| contribution['project'] == id}.first) || {}
       end
     end
   end

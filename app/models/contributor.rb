@@ -20,17 +20,24 @@ class Contributor
     "http://www.gravatar.com/avatar/#{Digest::MD5.hexdigest(email || '')}.jpg?s=#{size||80}"
   end
 
+  def visible_contributions
+    contributions.select{|contribution| contribution['visible']}
+  end
+
   def visible_contributions_with_projects
-    visible_contributions = contributions.select do |c|
-      c['visible']
+    visible_contributions_with_projects = visible_contributions.map do |contribution|
+      contribution.merge({'project' => Project.find(contribution['project'])})
     end
     
-    visible_contributions_with_projects = visible_contributions.map do |c|
-      c.merge({'project' => Project.find(c['project'])})
-    end
-    
-    visible_contributions_with_projects.sort_by do |c|
-      [c['order'] || 0, - (c['stopped_at'] ? c['stopped_at'].to_i : 0)]
+    visible_contributions_with_projects.sort_by do |contribution|
+      [contribution['order'] || 0, - (contribution['stopped_at'] || 0).to_i]
     end
   end
+  
+  class << self
+    def find_or_create_invisible_by_login(login)
+      find_by_login(login) || create(:login => login, :visible => false)
+    end
+  end
+  
 end

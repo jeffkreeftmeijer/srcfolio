@@ -2,6 +2,8 @@ clear_sources
 
 source "http://gemcutter.org"
 
+source "http://gems.github.com"
+
 gem "rails", "2.3.5"
 
 gem "mongo",                        "0.18.0"
@@ -19,6 +21,12 @@ only :test, :cucumber do
   gem "webrat",                 "0.5.3"
   gem "machinist",              "1.0.6"
   gem "machinist_mongomapper",  "0.9.7", :require_as => 'machinist/mongomapper'
+end
+
+only :development do
+  gem "metric_fu",  "1.1.6"
+  gem "reek",       "1.2.6"
+  gem "roodi",      "2.1.0"
 end
 
 disable_system_gems
