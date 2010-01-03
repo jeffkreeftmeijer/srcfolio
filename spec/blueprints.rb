@@ -4,7 +4,7 @@ require 'sham'
 Contributor.blueprint do
   login 'b0b'
   name  'Bob'
-  email 'b0b@example.com'
+  email name ? "#{name.downcase}@example.com" : ''
 end
 
 Project.blueprint do

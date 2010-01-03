@@ -10,11 +10,11 @@ Feature: Contributors
 		And a contributor exists with a name of "Dave"
 		And a contributor exists with a login of "3ric" and a name of "Eric", who is invisible
 		When I go to the contributor list
-		Then I should see "Alice"
-		And I should see "Bob"
-		And I should see "ch4rlie"
+		Then I should see Alice's gravatar
+		And I should see Bob's gravatar
+		And I should not see the gravatar of the user with a login of "ch4rlie"
 		And I should not see "/contributors/"
-		And I should not see "Eric"
+		And I should not see Eric's gravatar
 		When I follow "Alice"
 		Then I should be on Alice's page
 

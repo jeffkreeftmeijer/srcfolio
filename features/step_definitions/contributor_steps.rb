@@ -175,8 +175,20 @@ end
 
 Then /^I should see ([^\"]*)'s gravatar$/ do |name|
   contributor = Contributor.find_by_name(name)
-  response.body.should include("http://www.gravatar.com/avatar/012a6a06cd312fbc0be8b3f28c4ef880.jpg")
+  response.body.should include(contributor.gravatar_url[0,67])
 end
+
+Then /^I should not see the gravatar of the user with a login of "([^\"]*)"$/ do |login|
+  contributor = Contributor.find_by_login(login)
+  response.body.should_not include(contributor.gravatar_url[0,67])
+end
+
+
+Then /^I should not see ([^\"]*)'s gravatar$/ do |name|
+  contributor = Contributor.find_by_name(name)
+  response.body.should_not include(contributor.gravatar_url[0,67])
+end
+
 
 Then /^I should see an? (team|owner|fork) ribbon$/ do |type|
   response.body.should include "src=\"/images/ribbon_#{type}.gif"
