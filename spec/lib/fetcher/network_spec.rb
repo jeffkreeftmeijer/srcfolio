@@ -57,9 +57,9 @@ describe Fetcher::Network do
       project = Project.find contributor.contributions.first['project']
       project.should be_instance_of Project
       project.name.should == 'srcfolio'
-      contributor.contributions.first['commits'].should == 21
-      contributor.contributions.first['started_at'].should == '2009-12-13 08:03:03'.to_time
-      contributor.contributions.first['stopped_at'].should == '2009-12-21 02:12:06'.to_time
+      contributor.contributions.first['commits'].should == 3
+      contributor.contributions.first['started_at'].should == '2009-01-01 00:00:00'.to_time
+      contributor.contributions.first['stopped_at'].should == '2009-01-03 00:00:00'.to_time
     end
 
     it 'should only link the projects once' do
@@ -78,9 +78,10 @@ describe Fetcher::Network do
       contributor.contributions.first['member'].should == true
     end
 
-    it 'should create contributors if they do not exist yet' do
+    it 'should create invisible contributors if they do not exist yet' do
+      Contributor.delete_all
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
-      contributor = Contributor.find_by_login('bob')
+      contributor = Contributor.find_by_login('b0b')
       contributor.should_not be_nil
       contributor.visible.should == false
     end
@@ -90,9 +91,9 @@ describe Fetcher::Network do
       Contributor.find_by_login('charlie').should be_nil
     end
 
-    it 'should set the commit count for the project and merge contributors without a login but matching names' do
+    it 'should set the commit count for the project' do
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
-      Project.find_by_namespace_and_name('jeffkreeftmeijer', 'srcfolio').commits.should == 23
+      Project.find_by_namespace_and_name('jeffkreeftmeijer', 'srcfolio').commits.should == 4
     end
 
     it 'should make forks invisible by default' do

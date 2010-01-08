@@ -1,1 +1,48 @@
-{"commits": [{"parents":[],"author":"Jeff Kreeftmeijer","time":0,"id":"d2917a69054f914bd615d56c867ebf4b1342ab53","date":"2009-12-13 08:03:03","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"Initial commit","login":"jeffkreeftmeijer"},{"parents":[["d2917a69054f914bd615d56c867ebf4b1342ab53",0,1]],"author":"Jeff Kreeftmeijer","time":1,"id":"7c7220e936b3e0628a1790a3127554960fb88c32","date":"2009-12-14 06:44:57","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"added cucumber and started the contributors feature","login":"jeffkreeftmeijer"},{"parents":[["7c7220e936b3e0628a1790a3127554960fb88c32",1,1]],"author":"Jeff Kreeftmeijer","time":2,"id":"5547a877d6bd11730c21c5c1a211b65b0ae017ba","date":"2009-12-14 08:27:10","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"switched to bundler and updated cucumber to 0.4.4","login":"jeffkreeftmeijer"},{"parents":[["5547a877d6bd11730c21c5c1a211b65b0ae017ba",2,1]],"author":"jeffkreeftmeijer","time":3,"id":"4d5b23cfc2f1bdc4079ab66ca354b6c5615496b5","date":"2009-12-14 16:07:38","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"switched to mongodb","login":""},{"parents":[["4d5b23cfc2f1bdc4079ab66ca354b6c5615496b5",3,1]],"author":"jeffkreeftmeijer","time":4,"id":"1ec74e23d8ad8cb9b1ad8c95e6e9633f77c72f61","date":"2009-12-15 11:49:20","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"added /test to .gitignore, cleaned up the /vendor/gems/cache and added a feature for contributors","login":"jeffkreeftmeijer"},{"parents":[["1ec74e23d8ad8cb9b1ad8c95e6e9633f77c72f61",4,1]],"author":"jeffkreeftmeijer","time":5,"id":"f3c1394be7e2ac88b55bd8754cfd8b06edf1f199","date":"2009-12-16 10:55:08","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"added Machinist and MachinistMongomapper","login":"bob"},{"parents":[["f3c1394be7e2ac88b55bd8754cfd8b06edf1f199",5,1]],"author":"Jeff Kreeftmeijer","time":6,"id":"6b089c236ac3a87d7c1079ab06c110c2ebe0073d","date":"2009-12-17 10:09:47","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"added the Contributor model, ContributorController#show and got Machinist working","login":"jeffkreeftmeijer"},{"parents":[["6b089c236ac3a87d7c1079ab06c110c2ebe0073d",6,1]],"author":"Jeff Kreeftmeijer","time":7,"id":"3056384db087f0ec0f2510a797d813cfe378bac7","date":"2009-12-17 10:13:41","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"deleted friendly_id and removed some trailing spaces","login":"jeffkreeftmeijer"},{"parents":[["3056384db087f0ec0f2510a797d813cfe378bac7",7,1]],"author":"Jeff Kreeftmeijer","time":8,"id":"589ff980e454278381c9bb1e0228b8a60d7a3386","date":"2009-12-17 10:27:01","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"switched to find_by_login in ContributorsController#show","login":"jeffkreeftmeijer"},{"parents":[["589ff980e454278381c9bb1e0228b8a60d7a3386",8,1]],"author":"jeffkreeftmeijer","time":9,"id":"879b3361c0f750997f9e1fe11fde93eb4deacccf","date":"2009-12-17 13:43:44","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"added specs for ContributorsController#show and got rspec working","login":"jeffkreeftmeijer"},{"parents":[["879b3361c0f750997f9e1fe11fde93eb4deacccf",9,1]],"author":"jeffkreeftmeijer","time":10,"id":"a42e50b10196da5ae461919d025c0d1304bdd0af","date":"2009-12-17 23:37:17","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"contributions list on ContributorController#show, added the Project model","login":"jeffkreeftmeijer"},{"parents":[["a42e50b10196da5ae461919d025c0d1304bdd0af",10,1]],"author":"jeffkreeftmeijer","time":11,"id":"1c8047f4764f55e763f4906da25b4628699ea68d","date":"2009-12-17 23:38:21","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"removed stray partial","login":"jeffkreeftmeijer"},{"parents":[["1c8047f4764f55e763f4906da25b4628699ea68d",11,1]],"author":"Jeff Kreeftmeijer","time":12,"id":"6fe83df79a2d9f8a0cf489d9d178087ac20c2051","date":"2009-12-18 02:12:05","gravatar":"f03f4ce7b507aede386263d218228b6a","space":2,"message":"added the Contributor 404","login":"charlie"},{"parents":[["6fe83df79a2d9f8a0cf489d9d178087ac20c2051",12,1]],"author":"jeffkreeftmeijer","time":13,"id":"b3944f0e2de067e87e9a70402aab38d047662dcd","date":"2009-12-19 08:42:16","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"added DelayedJob","login":"jeffkreeftmeijer"},{"parents":[["b3944f0e2de067e87e9a70402aab38d047662dcd",13,1]],"author":"Jeff Kreeftmeijer","time":14,"id":"bce08a1e73462f419206f453eac1424e7024b203","date":"2009-12-20 00:46:27","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"cleaned up gem cache","login":"jeffkreeftmeijer"},{"parents":[["bce08a1e73462f419206f453eac1424e7024b203",14,1]],"author":"Jeff Kreeftmeijer","time":15,"id":"7ea04c8fdbcbb6c719ec52dc3daf1e6751b30545","date":"2009-12-20 01:10:35","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"added specs for contributors with contributions","login":"jeffkreeftmeijer"},{"parents":[["7ea04c8fdbcbb6c719ec52dc3daf1e6751b30545",15,1]],"author":"Jeff Kreeftmeijer","time":16,"id":"8b3cbbbaeccb502d8674f5e32b53b9f0c64a6a95","date":"2009-12-20 01:50:18","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"added ContributorController#index","login":"jeffkreeftmeijer"},{"parents":[["8b3cbbbaeccb502d8674f5e32b53b9f0c64a6a95",16,1]],"author":"Jeff Kreeftmeijer","time":17,"id":"2bd9168dd278857aa389751b56a25aadf04796f3","date":"2009-12-20 01:57:47","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"removed the helpers and db dirs","login":"jeffkreeftmeijer"},{"parents":[["2bd9168dd278857aa389751b56a25aadf04796f3",17,1]],"author":"Jeff Kreeftmeijer","time":18,"id":"14fd94f66774b9b0c67e3c31f5b4574e6ed80df0","date":"2009-12-20 02:17:06","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"added Fetcher specs","login":"jeffkreeftmeijer"},{"parents":[["14fd94f66774b9b0c67e3c31f5b4574e6ed80df0",18,1]],"author":"Jeff Kreeftmeijer","time":19,"id":"1078fad8126a70d0532598c4ae3f8b8bde22ebb3","date":"2009-12-20 11:00:57","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"added Fetcher::User and HTTParty","login":"jeffkreeftmeijer"},{"parents":[["1078fad8126a70d0532598c4ae3f8b8bde22ebb3",19,1]],"author":"jeffkreeftmeijer","time":20,"id":"f987ce8b5acf9e8c10bec9f73ff6e3f2c5d5565a","date":"2009-12-20 15:13:53","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"creating complete Contributor documents and handling Github 404s","login":"jeffkreeftmeijer"},{"parents":[["f987ce8b5acf9e8c10bec9f73ff6e3f2c5d5565a",20,1]],"author":"jeffkreeftmeijer","time":21,"id":"5b1e2f122a1f91523dfba59af148f0b0e7faaa22","date":"2009-12-21 01:01:24","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"added Fetcher::Repositoy","login":"jeffkreeftmeijer"},{"parents":[["5b1e2f122a1f91523dfba59af148f0b0e7faaa22",21,1]],"author":"jeffkreeftmeijer","time":22,"id":"1ee75f4dbcae1ae919b923d1f8c89c4aa4cffd3a","date":"2009-12-21 02:12:06","gravatar":"f03f4ce7b507aede386263d218228b6a","space":1,"message":"autocall from Fetcher::User to Fetcher::Repository and made sure the Project owner gets set","login":"jeffkreeftmeijer"}]}
+{
+  "commits":[
+    {
+      "parents":[],
+      "author":"Jeff Kreeftmeijer",
+      "time":0,
+      "id":"d2917a69054f914bd615d56c867ebf4b1342ab53",
+      "date":"2009-01-01 00:00:00",
+      "gravatar":"f03f4ce7b507aede386263d218228b6a",
+      "space":1,
+      "message":"Initial commit",
+      "login":"jeffkreeftmeijer"
+    },
+    {
+      "parents":[],
+      "author":"Jeff Kreeftmeijer",
+      "time":1,
+      "id":"d2917a69054f914bd615d56c867ebf4b1342ab53",
+      "date":"2009-01-02 00:00:00",
+      "gravatar":"f03f4ce7b507aede386263d218228b6a",
+      "space":1,
+      "message":"Did some stuff",
+      "login":"jeffkreeftmeijer"
+    },
+    {
+      "parents":[],
+      "author":"Jeff Kreeftmeijer",
+      "time":2,
+      "id":"d2917a69054f914bd615d56c867ebf4b1342ab53",
+      "date":"2009-01-03 00:00:00",
+      "gravatar":"f03f4ce7b507aede386263d218228b6a",
+      "space":1,
+      "message":"Did more stuff",
+      "login":"jeffkreeftmeijer"
+    },
+    {
+      "parents":[],
+      "author":"Bob",
+      "time":3,
+      "id":"d2917a69054f914bd615d56c867ebf4b1342ab53",
+      "date":"2009-01-04 00:00:00",
+      "gravatar":"f03f4ce7b507aede386263d218228b6a",
+      "space":1,
+      "message":"Did more stuff",
+      "login":"b0b"
+    }
+  ]
+}

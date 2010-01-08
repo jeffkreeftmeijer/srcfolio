@@ -23,10 +23,6 @@ module Fetcher
 
         network_data['commits'].each do |commit|
           if commit['space'] == 1
-            if commit['login'].empty?
-              contributor = network_data['commits'].select{|c| c['author'] == commit['author'] && !c['login'].empty?}.first
-              commit['login'] = contributor ? contributor['login'] : ''
-            end
 
             contribution = {
               :login =>       commit['login'],
