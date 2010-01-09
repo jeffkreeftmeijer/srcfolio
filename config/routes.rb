@@ -6,7 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.namespace :admin, :conditions => { :subdomain => false } do |admin|
     admin.root :controller => :jobs
-    admin.resources :contributors, :only => :index
+    admin.resources :contributors, :only => [:index, :update]
     admin.resources :jobs, :only => :index
   end
 end

@@ -13,10 +13,26 @@
   %strong= Contributor.count(:visible => false)
     
 
+%h3 Broken Contributors
+%ul
+  -@broken_contributors.each do |contributor|
+    -form_for ['admin', contributor] do |f|
+      %li= link_to(contributor.name, 'http://github.com/search?q=' + contributor.name, :target => 'blank')
+      login
+      = f.text_field :login, :value => contributor.name
+      = f.submit
+      %ul
+        -contributor.contributions.map{|c| c.merge({'project' => Project.find(c['project'])})}.each do |contribution|
+          %li
+            = link_to "#{contribution['project'].namespace}/#{contribution['project'].name}", "http://github.com/#{contribution['project'].namespace}/#{contribution['project'].name}", :target => 'blank'
+            = "#{contribution['commits']}/#{contribution['project'].commits} - #{contribution['stopped_at'].to_date.strftime("%Y-%m-%d ")}"
+            
+            
+
 %h3 Hidden Contributors
 
 %ul
-  -@contributors.each do |contributor|
+  -@invisible_contributors.each do |contributor|
     %li= link_to(contributor.login, contributor_path(contributor.login), :target => 'blank')
 
 = link_to('Jobs >>', admin_jobs_path)
