@@ -26,6 +26,7 @@ module Fetcher
 
             contribution = {
               :login =>       commit['login'],
+              :name =>        commit['author'],
               :commits =>     contributions[commit['login']] ? contributions[commit['login']][:commits] += 1 : 1
             }
 
@@ -36,14 +37,18 @@ module Fetcher
             contribution[:stopped_at] = contributions[commit['login']].nil? || contributions[commit['login']][:stopped_at].nil? || commit['date'].to_time > contributions[commit['login']][:stopped_at].to_time ?
               commit['date'].to_time :
               contributions[commit['login']][:stopped_at]
-
-            contributions.merge!({commit['login'] => contribution})
+            
+            contributions.merge!({commit['login'].empty? ? commit['author'] : commit['login'] => contribution})
           end
         end
-
+        
         contributions.values.each do |contribution|
-          unless contributor = Contributor.find_by_login(contribution[:login])
-            contributor = Contributor.create(:login => contribution[:login], :visible => false)
+          unless contributor = (contribution[:login].empty? ? Contributor.find_by_name(contribution[:name]) : Contributor.find_by_login(contribution[:login]))
+            contributor = Contributor.create(
+              :login =>   contribution[:login],
+              :name =>    contribution[:name],
+              :visible => false
+            )
           end
 
           existing_contribution = contributor.contributions.select{|c| c['project'] == project.id}.first

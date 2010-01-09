@@ -93,7 +93,7 @@ describe Fetcher::Network do
 
     it 'should set the commit count for the project' do
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
-      Project.find_by_namespace_and_name('jeffkreeftmeijer', 'srcfolio').commits.should == 4
+      Project.find_by_namespace_and_name('jeffkreeftmeijer', 'srcfolio').commits.should == 6
     end
 
     it 'should make forks invisible by default' do
@@ -103,6 +103,15 @@ describe Fetcher::Network do
       Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
       contributor = Contributor.find_by_login('jeffkreeftmeijer')
       contributor.contributions.first['visible'].should == false
+    end
+    
+    it 'should create contributors from their author name when they dont have a login' do
+      Fetcher::Network.fetch_all('jeffkreeftmeijer', 'srcfolio')
+      ['Charlie', 'David'].each do |name|
+        contributor = Contributor.find_by_name(name)
+        contributor.should_not be_nil
+        contributor.login.should == ''            
+      end
     end
   end
 end
