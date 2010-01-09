@@ -11,7 +11,6 @@ describe Contributor do
           {
             'project'     => 123,
             'owner'       => true,
-            'commits'     => 3
           },
           {
             'project'     => 321,
@@ -30,8 +29,10 @@ describe Contributor do
           :login => 'al1ce',
           :contributions => [
             {
-              'project' => 321,
-              'owner'   => true
+              'project' =>    321,
+              'owner' =>      true,
+              'commits' =>    3,
+              'started_at' => 'January 1 2009'
             }
           ]
         )
@@ -53,6 +54,11 @@ describe Contributor do
         contribution['commits'].should_not be_nil
         contribution['started_at'].should_not be_nil
         contribution['stopped_at'].should_not be_nil
+      end
+      
+      it 'should add up the commit count' do
+        contribution = @merged_contributor.contributions.last
+        contribution['commits'].should == 15
       end
     end
     

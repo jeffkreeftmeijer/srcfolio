@@ -43,7 +43,7 @@ class Contributor
         
         contributor.contributions <<
           (existing_contribution || {}).merge({
-            'commits' => contribution['commits'],
+            'commits' =>    (existing_contribution ? existing_contribution['commits'] : 0) + (contribution['commits'] || 0),
             'started_at' => contribution['started_at'],
             'stopped_at' => contribution['stopped_at']
           })
