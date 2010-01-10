@@ -17,16 +17,12 @@ class Admin::ContributorsController < ApplicationController
   def update
     @contributor = Contributor.find(params[:id])
     if existing_contributor = Contributor.find_by_login(params[:contributor][:login])
-      puts existing_contributor.contributions.to_yaml
-      puts '****'
-      puts @contributor.contributions.to_yaml
-      raise('duss..')
+      raise existing_contributor
     else
       @contributor = Contributor.find(params[:id])
       @contributor.update_attributes(params[:contributor])
       Fetcher::User.send_later(:fetch, params[:login])
     end
-    
     redirect_to admin_contributors_path
   end
 end
