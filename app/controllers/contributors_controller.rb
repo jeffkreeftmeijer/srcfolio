@@ -12,7 +12,7 @@ class ContributorsController < ApplicationController
   def show
     id = current_subdomain || params[:id]
     unless @contributor = Contributor.find_by_login(id, :visible => true)
-      Fetcher::User.send_later(:fetch, id)
+      Navvy::Job.enqueue(Fetcher::User, :fetch, id)
       return render :not_found, :status => 404
     end
 

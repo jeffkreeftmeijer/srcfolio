@@ -45,9 +45,11 @@ describe ContributorsController do
     response.status.should == '404 Not Found'
     response.should_not be_success
     response.should render_template('contributors/not_found')
-    job = Delayed::Job.first(:order => 'created_at desc') # workaround to get the last job...
+    job = Navvy::Job.last(:order => 'created_at')
     job.should_not be_nil
-    job.handler.should include('Fetcher::User', ':fetch', 'z0e')
+    job.object.should == 'Fetcher::User'
+    job.method_name.should == :fetch
+    job.args.should == ['z0e']
   end
 
   it 'should show a contributor page with contributions' do

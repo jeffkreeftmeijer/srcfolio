@@ -39,9 +39,9 @@ module Fetcher
             'owner' =>    true,
             'visible' =>  !project.fork?
           })
-
-          Fetcher::Collaborator.send_later(:fetch_all, github_username, repository['name'])
-          Fetcher::Network.send_later(:fetch_all, github_username, repository['name'])
+          
+          Navvy::Job.enqueue(Fetcher::Collaborator, :fetch_all, github_username, repository['name'])
+          Navvy::Job.enqueue(Fetcher::Network, :fetch_all, github_username, repository['name'])
         end
         contributor.save
       end

@@ -13,5 +13,5 @@ require File.expand_path(File.join(File.dirname(__FILE__), 'blueprints'))
 def delete_everything
   Project.delete_all
   Contributor.delete_all
-  Delayed::Job.delete_all
+  Navvy::Job.delete_all
 end

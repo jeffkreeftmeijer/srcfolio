@@ -21,7 +21,7 @@ class Admin::ContributorsController < ApplicationController
     else
       @contributor = Contributor.find(params[:id])
       @contributor.update_attributes(params[:contributor])
-      Fetcher::User.send_later(:fetch, params[:login])
+      Navvy::Job.enqueue(Fetcher::User, fetch, params[:login])
     end
     redirect_to admin_contributors_path
   end

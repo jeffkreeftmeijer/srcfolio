@@ -77,12 +77,16 @@ describe Fetcher::Repository do
     end
 
     it 'should create new jobs to fetch the project teams and network data' do
-      Delayed::Job.delete_all
+      Navvy::Job.delete_all
       Fetcher::Repository.fetch_all('jeffkreeftmeijer')
-      jobs = Delayed::Job.all
+      jobs = Navvy::Job.all
       jobs.length.should == 6
-      jobs[0].handler.should include('Fetcher::Collaborator', ':fetch_all', 'jeffkreeftmeijer', 'srcfolio')
-      jobs[1].handler.should include('Fetcher::Network', ':fetch_all', 'jeffkreeftmeijer', 'srcfolio')
+      jobs[0].object.should == 'Fetcher::Collaborator'
+      jobs[0].method_name.should == :fetch_all
+      jobs[0].args.should == ['jeffkreeftmeijer', 'srcfolio']
+      jobs[1].object.should == 'Fetcher::Network'
+      jobs[1].method_name.should == :fetch_all
+      jobs[1].args.should == ['jeffkreeftmeijer', 'srcfolio']
     end
   end
 end

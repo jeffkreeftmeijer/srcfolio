@@ -18,8 +18,7 @@ module Fetcher
           :email =>     response['user']['email'],
           :visible =>   true
         )
-
-        Fetcher::Repository.send_later(:fetch_all, github_username)
+        Navvy::Job.enqueue(Fetcher::Repository, :fetch_all, github_username)
       end
     end
   end

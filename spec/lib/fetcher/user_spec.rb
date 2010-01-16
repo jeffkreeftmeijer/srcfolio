@@ -40,11 +40,13 @@ describe Fetcher::User do
     end
 
     it 'should create a new job to fetch projects' do
-      Delayed::Job.delete_all
+      Navvy::Job.delete_all
       Fetcher::User.fetch('jeffkreeftmeijer')
-      job = Delayed::Job.first(:order => 'created_at desc') # workaround to get the last job...
+      job = Navvy::Job.last(:order => 'created_at')
       job.should_not be_nil
-      job.handler.should include('Fetcher::Repository', ':fetch_all', 'jeffkreeftmeijer')
+      job.object.should == 'Fetcher::Repository'
+      job.method_name.should == :fetch_all
+      job.args.should == ['jeffkreeftmeijer']
     end
 
     it 'should raise an error when the specified user could not be found' do
