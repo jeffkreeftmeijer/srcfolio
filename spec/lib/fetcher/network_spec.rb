@@ -10,12 +10,19 @@ describe Fetcher::Network do
     network_meta_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../../stubs/network_meta.json')).read
     @network_meta = HTTParty::Response.new(JSON(network_meta_stub_file), network_meta_stub_file, 200, 'OK')
 
+    #broken_network_meta_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../../stubs/broken_network_meta.json')).read
+    #@broken_network_meta = HTTParty::Response.new(JSON(broken_network_meta_stub_file), broken_network_meta_stub_file, 200, 'OK')
+
     network_data_stub_file = open(File.expand_path(File.dirname(__FILE__) + '/../../stubs/network_data.json')).read
     @network_data = HTTParty::Response.new(JSON(network_data_stub_file), network_data_stub_file, 200, 'OK')
 
     Fetcher::Network.stub!(:get).
       with('/jeffkreeftmeijer/srcfolio/network_meta').
       and_return(@network_meta)
+    
+    #Fetcher::Network.stub!(:get).
+    #  with('/jeffkreeftmeijer/broken/network_meta').
+    #  and_return(@broken_network_meta)
 
     Fetcher::Network.stub!(:get).
       with(
